@@ -1,11 +1,12 @@
 var express = require('express'),
+    _ = require('lodash'),
     // errorHandler = require('error-handler'),
     DB = require('./server/models');
 
 //  bodyParser = require('body-parser'),
-//  routes = require('./routes'),
+  routers = require('./server/routes'),
 //  api = require('./routes/api'),
-//  http = require('http'),
+  http = require('http'),
   path = require('path');
 
 var app = module.exports = express();
@@ -35,6 +36,14 @@ if (env === 'production') {
 /**
  * Routes
  */
+//console.log('OEFJKHEFKOËFHO": ', routers);
+
+routers.forEach(router => {
+  if(_.isFunction(router)) {
+    app.use('/', router);
+  }
+});
+
 
 // serve index and view partials
 //app.get('/', routes.index);
@@ -50,7 +59,4 @@ if (env === 'production') {
 /**
  * Start Server
  */
-
-//http.createServer(app).listen(app.get('port'), function () {
-  //console.log('Express server listening on port ' + app.get('port'));
-//});
+app.listen('7029');
