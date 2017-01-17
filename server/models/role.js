@@ -1,9 +1,9 @@
 var db = require('../db.js');
 
 module.exports = {
-  listGrade: function(cb) {
-    db('Grade').select('*').then(function(grades) {
-      cb(null, grades);
+  listRoles: function(cb) {
+    db('Role').select('*').then(function(roles) {
+      cb(null, roles);
     }).catch(function(err) {
       cb(err);
     });
