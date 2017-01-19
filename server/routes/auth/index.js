@@ -4,31 +4,6 @@ var DB = require('../../models.js');
 var auth = require('../../auth.js');
 var jwt = require('jsonwebtoken');
 
-// function hashPassword(password, cb) {
-//   var salt = crypto.randomBytes(128).toString('base64');
-//   var iterations = 10000;
-//   crypto.pbkdf2(password, salt, iterations, 512, 'sha512', function(err, hash) {
-//     if(err) {
-//       return cb(err);
-//     }
-//     cb(null, {
-//         salt: salt,
-//         hash: hash,
-//         iterations: iterations
-//     });
-//   });
-// }
-//
-// function comparePassword(passwordAttempt, savedHash, savedSalt, savedIterations, cb) {
-//   crypto.pbkdf2(passwordAttempt, savedSalt, savedIterations, 512, 'sha512', function(err, hash) {
-//     if(err) {
-//       return cb(err);
-//     }
-//     hash = hash.toString('hex');
-//     cb(null, savedHash == hash);
-//   });
-// }
-
 router.post('/auth', function(req, res, next) {
   if(!req.body || !req.body.email || !req.body.password) {
     res.json({
@@ -63,7 +38,5 @@ router.post('/auth', function(req, res, next) {
     });
   });
 });
-
-
 
 module.exports = router;
