@@ -38,7 +38,7 @@ router.post('/auth', function(req, res, next) {
      return next();
   }
 
-  DB.user.getUser({userEmail: req.body.email}, function(err, user) {
+  DB.user.getUser({email: req.body.email}, function(err, user) {
     if(err) {
       res.json({
          success: false,
@@ -49,6 +49,8 @@ router.post('/auth', function(req, res, next) {
     comparePassword(req.body.password, user.password, user.salt, user.iteration, function(err, isValid) {
       if(isValid) {
         delete user.password;
+        delete user.salt;
+        delete user.iteration;
         var token = jwt.sign(user, 'secret');
         res.json({
          success: true,
