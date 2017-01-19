@@ -5,8 +5,6 @@ var DB = require('../../models.js')
 router.get('/user/', function(req, res, next) {
   DB.user.listUsers(function(err, users) {
     if(err) {
-      console.log('JéM PASA : ', err);
-
       res.json({
          success: false,
          message: 'Failed load users'
