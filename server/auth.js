@@ -9,8 +9,6 @@ var crypto = require('crypto');
 var opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
 opts.secretOrKey = 'secret';
-// opts.issuer = 'accounts.examplesoft.com';
-// opts.audience = 'yoursite.net';
 passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
    DB.user.select({id: jwt_payload.id}, function(err, user) {
        if (err) {
@@ -43,6 +41,7 @@ module.exports = {
   },
 
   comparePassword: function(passwordAttempt, savedHash, savedSalt, savedIterations, cb) {
+    console.log('SALT : ', savedSalt);
     crypto.pbkdf2(passwordAttempt, savedSalt, savedIterations, 512, 'sha512', function(err, hash) {
       if(err) {
         return cb(err);

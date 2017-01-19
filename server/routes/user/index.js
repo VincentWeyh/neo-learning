@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
-var DB = require('../../models.js')
+var DB = require('../../models.js');
+
+
 
 router.get('/user', function(req, res, next) {
-  DB.user.listUsers(function(err, users) {
+  DB.user.getAllUsers(function(err, users) {
     if(err) {
       res.json({
          success: false,

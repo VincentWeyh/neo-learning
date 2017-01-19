@@ -3,7 +3,7 @@ var router = express.Router();
 var DB = require('../../models.js')
 
 router.get('/course', function(req, res, next) {
-  DB.course.listCourses(function(err, courses) {
+  DB.course.getAllCourses(function(err, courses) {
     if(err) {
       res.json({
          success: false,

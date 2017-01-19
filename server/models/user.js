@@ -18,14 +18,13 @@ module.exports = {
     });
   },
   getUser: function(criteria, cb) {
-    db('User').select('*').where( {idUser: criteria}).then(function(users) {
-      if(!users || !users.length) {
+    console.log('CRITERIA : ', criteria);
+    db('User').select('*').where({email: criteria}).then(function(user) {
+      console.log('USER : ', user)
+      if(!user || !user.length) {
         return cb('No user found');
       }
-      delete users[0].password;
-      delete users[0].salt;
-      delete users[0].iteration;
-      cb(null, users[0]);
+      cb(null, user[0]);
     }).catch(function(err) {
       cb(err);
     });
