@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var DB = require('../../models.js')
 
-router.get('/user/', function(req, res, next) {
+router.get('/user', function(req, res, next) {
   DB.user.listUsers(function(err, users) {
     if(err) {
       res.json({
@@ -36,7 +36,6 @@ router.get('/user/:id', function(req, res, next) {
 
 /* POST /users */
 router.post('/user', function(req, res, next) {
-  console.log("Create User : " , req.body);
   if (!req.body.email || !req.body.password ) {
     res.json({
        success: false,
@@ -63,6 +62,21 @@ router.post('/user', function(req, res, next) {
 
 router.delete('/user/:id', function(req, res, next) {
   DB.user.deleteUser(req.params.id, function(err) {
+    if(err) {
+      res.json({
+         success: false,
+         message: err
+       });
+       return next();
+    }
+    res.json({
+       success: true
+     });
+  });
+});
+
+router.put('/user/:id', function(req, res, next) {
+  DB.user.updateUser(req.params.id, req.body, function(err) {
     if(err) {
       res.json({
          success: false,
