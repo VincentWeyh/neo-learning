@@ -1,5 +1,263 @@
 /* app css stylesheet */
 
-.top-header{
-  background-color: black;
+/**********************
+
+COLORS
+
+LIGHT MAROON: #E8DDCB; rgba(232, 221, 203, 1);
+MAROON : #CDB380; rgba(205, 179, 128, 1);
+LIGTH GREEN : #036564; rgba(3, 101, 100, 1);
+BLUE : #033649; rgba(3, 54, 73, 1);
+DARK BLUE : #031634; rgba(3, 22, 52, 1);
+LIGTH BLUE : #1C2B36
+
+
+***********************/
+
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+/***********************
+
+        GENERAL
+
+************************/
+
+body{
+  font: 14px/16px "Roboto", sans-serif !important;
+}
+
+#wrapper{
+  padding-left: 195px !important;
+}
+
+.help-block{
+  margin-bottom: 0px !important;
+}
+
+.logo{
+  padding:15px;
+}
+
+#welcome-container{
+    min-height: 100%;
+}
+
+.clear{
+  clear:both;
+}
+
+.login-container{
+    background-color: rgba(255, 255, 255, 0.5);
+    padding:25px;
+    margin-top:5%;
+}
+
+.login-container h2{
+  margin-top: 10px;
+}
+
+.sm-logo{
+  height: 20px;
+  margin: 15px 30px;
+}
+
+/***********************
+
+      DASHBOARD
+
+************************/
+
+.side-nav a{
+  font-size: 13px;
+}
+
+.side-nav{
+  border-top: 1px solid #333;
+  padding: 18px 0 0 0;
+  background-color: #1C2B36 !important;
+  width: 195px !important;
+}
+
+.navbar-inverse {
+    background-color: #1C2B36 !important;
+    border-color: #080808;
+}
+
+/***********************
+
+        HEADER
+
+************************/
+
+.header-band{
+    text-align: center;
+    border-bottom: 2px solid #E8DDCB;
+    height:85px;
+    background-color: rgba(255, 255, 255, 0.2);
+    position: relative;
+    top: 0;
+}
+
+.navbar-default{
+  height:70px;
+  background-color: #036564 !important;
+}
+
+.navbar-brand{
+  padding: 25px 15px !important;
+}
+
+.navbar-default .navbar-nav > li > a:focus, .navbar-default .navbar-nav > li > a:hover{
+  color: #E8DDCB !important;
+}
+
+.navbar-default .navbar-nav > li > a{
+  color: white !important;
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+.navbar-default .navbar-nav > li.active > a{
+  color: #031634 !important;
+}
+
+.navbar-default .navbar-brand{
+  color: white !important;
+}
+
+/***********************
+
+    HOME / SIGN IN
+
+************************/
+
+.btn-login{
+  width: 125px;
+}
+
+#login-form{
+  padding: 10px;
+  margin-top: 25px;
+}
+
+.login-container label{
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 34px;
+  margin-left: 25px;
+}
+
+.login-container input{
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
+  color: #ffffff;
+}
+
+.login-container{
+  width: 540px;
+  margin: 0 auto;
+  margin-top: 5%;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  padding: 32px;
+}
+
+.btn.btn-primary {
+    border-width: 1px;
+    color: white;
+    background: transparent;
+    border-color: #d6d6d6;
+}
+
+.btn.btn-primary:hover {
+    border-width: 1px;
+    color: white;
+    background: transparent !important;
+    border-color: #d6d6d6;
+}
+
+.btn.btn-primary:focus {
+    border-width: 1px;
+    color: white;
+    background: transparent !important;
+    border-color: #d6d6d6;
+}
+
+.bglayer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  background: #033649; /* Old browsers */
+  background: -moz-linear-gradient(-45deg, #033649 0%, #031634 100%, #207cca 100%, #031634 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(-45deg, #033649 0%,#031634 100%,#207cca 100%,#031634 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(135deg, #033649 0%,#031634 100%,#207cca 100%,#031634 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#033649', endColorstr='#031634',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+video#bgvid {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    opacity: 0.25;
+    -ms-transform: translateX(-50%) translateY(-50%);
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    background: url(../images/blur-bg-blurred.jpg) no-repeat;
+    background-size: cover;
+}
+
+/***********************
+
+      ANIMATE
+
+************************/
+
+.view-animate-container {
+  position:relative;
+  height:100px!important;
+  background:white;
+  border:1px solid black;
+  height:40px;
+  overflow:hidden;
+}
+
+.view-animate {
+  padding:10px;
+}
+
+.view-animate.ng-enter, .view-animate.ng-leave {
+  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+
+  display:block;
+  width:100%;
+  border-left:1px solid black;
+
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:10px;
+}
+
+.view-animate.ng-enter {
+  left:100%;
+}
+.view-animate.ng-enter.ng-enter-active {
+  left:0;
+}
+.view-animate.ng-leave.ng-leave-active {
+  left:-100%;
 }
