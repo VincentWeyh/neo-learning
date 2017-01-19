@@ -5,7 +5,6 @@ var directories = fs.readdirSync(path.join(__dirname, './')).filter(function (di
   return fs.statSync(path.join(__dirname, './', directory)).isDirectory();
 });
 
-    console.log('Purée : ',directories )
 var routers = [];
 
 directories.forEach(directory => {

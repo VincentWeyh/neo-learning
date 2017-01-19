@@ -2,12 +2,17 @@ var express = require('express'),
     _ = require('lodash'),
     // errorHandler = require('error-handler'),
     DB = require('./server/models');
+    passport = require('passport');
+    bodyParser = require('body-parser');
 
 //  bodyParser = require('body-parser'),
   routers = require('./server/routes'),
 //  api = require('./routes/api'),
   http = require('http'),
   path = require('path');
+
+var authController = require('./server/auth');
+
 
 var app = module.exports = express();
 
@@ -19,6 +24,11 @@ app.set('views', __dirname + '/views');
 // app.use(bodyParser());
 // app.use(methodOverride());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
+app.use(passport.initialize());
 
 var env = process.env.NODE_ENV || 'development';
 
@@ -36,7 +46,6 @@ if (env === 'production') {
 /**
  * Routes
  */
-//console.log('OEFJKHEFKOËFHO": ', routers);
 
 routers.forEach(router => {
   if(_.isFunction(router)) {
