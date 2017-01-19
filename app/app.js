@@ -16,11 +16,8 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
   $stateProvider.state('signin', {
     url: '/signin',
     views: {
-       // the main template will be placed here (relatively named)
-       'container': { templateUrl: '/signin/signin.html', controller: 'SigninCtrl' },
-
-       // the child views will be defined here (absolutely named)
-       'header': { template: '<div class="header-band">' +
+       'signin': { templateUrl: '/signin/signin.html', controller: 'SigninCtrl' },
+       'nav': { template: '<div class="header-band">' +
          '<img class="logo" src="assets/images/neo_logo.png"></img>' +
        '</div>'}
     },
@@ -29,21 +26,15 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
   $stateProvider.state('dashboard', {
     url: '/dashboard',
     views : {
-      // the main template will be placed here (relatively named)
-      'container': { templateUrl: '/dashboard/partial/dashboard/dashboard.html', controller: 'SigninCtrl'},
-      'nav': { templateUrl: '/navigation/navigation.html'}
-      // the child views will be defined here (absolutely named)
-      //'nav': { templateUrl: '/navigation/navigation.html'}
+      'container': { templateUrl: '/dashboard/dashboard.html', controller: 'SigninCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html'}
     },
   })
   $stateProvider.state('upload', {
     url: '/upload',
     views : {
-      // the main template will be placed here (relatively named)
       'container': { templateUrl: '/upload/upload.html', controller: 'UploadCtrl'},
-
-      // the child views will be defined here (absolutely named)
-      'nav': { templateUrl: '/navigation/navigation.html'}
+      'nav': { templateUrl: 'shared/navigation/navigation.html'}
     },
   })
 
