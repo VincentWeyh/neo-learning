@@ -3,8 +3,9 @@
 // Declare app level module which depends on views, and components
 angular.module('NeoLearning', [
   'ui.router',
-  'NeoLearning.home',
-  'NeoLearning.signin'
+  'angularFileUpload',
+  'NeoLearning.signin',
+  'NeoLearning.upload'
 ]).
 config(['$locationProvider', '$stateProvider', '$urlRouterProvider', function($locationProvider, $stateProvider, $urlRouterProvider) {
 
@@ -14,12 +15,12 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', function($l
     url: '/signin',
     views: {
        // the main template will be placed here (relatively named)
-       '': { templateUrl: '/signin/signin.html', controller: 'SigninCtrl' },
+       'container': { templateUrl: '/signin/signin.html', controller: 'SigninCtrl' },
 
        // the child views will be defined here (absolutely named)
        'header': { template: '<div class="header-band">' +
          '<img class="logo" src="assets/images/neo_logo.png"></img>' +
-       '</div>', controller: 'headerCtrl' }
+       '</div>'}
     },
   })
 
@@ -27,12 +28,20 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider', function($l
     url: '/dashboard',
     views : {
       // the main template will be placed here (relatively named)
-      '': { templateUrl: '/dashboard/home.html', controller: 'SigninCtrl'},
+      'container': { templateUrl: '/dashboard/partial/dashboard/dashboard.html', controller: 'SigninCtrl'},
+      'nav': { templateUrl: '/navigation/navigation.html'}
+      // the child views will be defined here (absolutely named)
+      //'nav': { templateUrl: '/navigation/navigation.html'}
+    },
+  })
+  $stateProvider.state('upload', {
+    url: '/upload',
+    views : {
+      // the main template will be placed here (relatively named)
+      'container': { templateUrl: '/upload/upload.html', controller: 'UploadCtrl'},
 
-      // // the child views will be defined here (absolutely named)
-      // 'header': { template: '<div class="header-band">' +
-      //   '<img class="logo" src="assets/images/neo_logo.png"></img>' +
-      // '</div>', controller: 'headerCtrl'}
+      // the child views will be defined here (absolutely named)
+      'nav': { templateUrl: '/navigation/navigation.html'}
     },
   })
 }]);
