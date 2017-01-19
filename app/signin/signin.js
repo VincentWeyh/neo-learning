@@ -2,11 +2,18 @@
 
 angular.module('NeoLearning.signin', [])
 // Signin controller
-.controller('SigninCtrl', ['$scope', '$location', function($scope, $location) {
-  console.log("signin ctrl")
+.controller('SigninCtrl', ['$scope', '$location' , 'UserService', 'jwtHelper', function($scope, $location, UserService, jwtHelper) {
   // CHECK USER CREDENTIALS
   $scope.login = function(){
-    console.log("login attempt");
-    $location.path('/dashboard');
+    var user = UserService('auth').post({email: $scope.email, password: $scope.password });
+    user.$promise.then(function(result){
+      console.log(result);
+      if(result.success){
+        $location.path('/dashboard');
+        var decryptedToken = jwtHelper.decodeToken(result.data)
+      }else{
+        $scope.errorMessage = 'Identifiants incorrects'
+      }
+    })
   }
 }]);

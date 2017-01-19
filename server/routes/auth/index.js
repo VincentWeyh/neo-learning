@@ -24,6 +24,8 @@ router.post('/auth', function(req, res, next) {
     auth.comparePassword(req.body.password, user.password, user.salt, user.iteration, function(err, isValid) {
       if(isValid) {
         delete user.password;
+        delete user.salt;
+        delete user.iteration;
         var token = jwt.sign(user, 'secret');
         res.json({
          success: true,

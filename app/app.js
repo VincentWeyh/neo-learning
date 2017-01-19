@@ -2,37 +2,47 @@
 
 // Declare app level module which depends on views, and components
 angular.module('NeoLearning', [
+  'angular-jwt',
+  'ngResource',
   'ui.router',
-  'NeoLearning.home',
-  'NeoLearning.signin'
+  'angularFileUpload',
+  'NeoLearning.signin',
+  'NeoLearning.upload'
 ]).
-config(['$locationProvider', '$stateProvider', '$urlRouterProvider', function($locationProvider, $stateProvider, $urlRouterProvider) {
+config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourceProvider', function($locationProvider, $stateProvider, $urlRouterProvider, $resourceProvider) {
 
   $urlRouterProvider.otherwise('/signin');
 
   $stateProvider.state('signin', {
     url: '/signin',
     views: {
-       // the main template will be placed here (relatively named)
-       '': { templateUrl: '/signin/signin.html', controller: 'SigninCtrl' },
-
-       // the child views will be defined here (absolutely named)
-       'header': { template: '<div class="header-band">' +
+       'signin': { templateUrl: '/signin/signin.html', controller: 'SigninCtrl' },
+       'nav': { template: '<div class="header-band">' +
          '<img class="logo" src="assets/images/neo_logo.png"></img>' +
-       '</div>', controller: 'headerCtrl' }
+       '</div>'}
     },
   })
 
   $stateProvider.state('dashboard', {
     url: '/dashboard',
     views : {
-      // the main template will be placed here (relatively named)
-      '': { templateUrl: '/dashboard/home.html', controller: 'SigninCtrl'},
-
-      // // the child views will be defined here (absolutely named)
-      // 'header': { template: '<div class="header-band">' +
-      //   '<img class="logo" src="assets/images/neo_logo.png"></img>' +
-      // '</div>', controller: 'headerCtrl'}
+      'container': { templateUrl: '/dashboard/dashboard.html', controller: 'SigninCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html'}
     },
   })
+  $stateProvider.state('upload', {
+    url: '/upload',
+    views : {
+      'container': { templateUrl: '/upload/upload.html', controller: 'UploadCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html'}
+    },
+  })
+
+  $resourceProvider.defaults.actions = {
+      create: {method: 'POST'},
+      get:    {method: 'GET'},
+      getAll: {method: 'GET', isArray:true},
+      update: {method: 'PUT'},
+      delete: {method: 'DELETE'}
+    };
 }]);
