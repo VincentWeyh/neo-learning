@@ -7,7 +7,8 @@ angular.module('NeoLearning', [
   'ui.router',
   'angularFileUpload',
   'NeoLearning.signin',
-  'NeoLearning.upload'
+  'NeoLearning.upload',
+  'NeoLearning.dashboard'
 ]).
 config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourceProvider', function($locationProvider, $stateProvider, $urlRouterProvider, $resourceProvider) {
 
@@ -21,14 +22,16 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
          '<img class="logo" src="assets/images/neo_logo.png"></img>' +
        '</div>'}
     },
+    authenticate: false
   })
 
   $stateProvider.state('dashboard', {
     url: '/dashboard',
     views : {
-      'container': { templateUrl: '/dashboard/dashboard.html', controller: 'SigninCtrl'},
+      'container': { templateUrl: '/dashboard/dashboard.html', controller: 'DashCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html'}
     },
+    authenticate: true,
   })
   $stateProvider.state('upload', {
     url: '/upload',
@@ -36,6 +39,7 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
       'container': { templateUrl: '/upload/upload.html', controller: 'UploadCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html'}
     },
+    authenticate: true,
   })
 
   $resourceProvider.defaults.actions = {
@@ -45,4 +49,14 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
       update: {method: 'PUT'},
       delete: {method: 'DELETE'}
     };
-}]);
+}])
+.run(function ($rootScope, $state, UserService) {
+  $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
+    console.log("route changed", UserService.isAuth());
+    if (toState.authenticate && !UserService.isAuth()){
+      // User isn’t authenticated
+      $state.transitionTo("signin");
+      event.preventDefault();
+    }
+  });
+});

@@ -1,10 +1,13 @@
 'use strict';
 
 angular.module('NeoLearning.dashboard', [])
-// Signin controller
-.controller('DashCtrl', ['$scope', '$location' , 'UserService', function($scope, $location, UserService) {
-  $scope.students = function(){
+.controller('DashCtrl', ['$scope', '$location', '$window', 'UserService', function($scope, $location, $window, UserService) {
 
+  console.log($window.sessionStorage.token);
+  console.log("user", $window.sessionStorage.user);
+
+  $scope.students = function(){
+    console.log(UserService.api('user').get());
   }
 
   $scope.login = function(){
