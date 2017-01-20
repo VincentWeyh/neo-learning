@@ -37,6 +37,13 @@ module.exports = {
       cb(err);
     });
   },
+  listUsersIn: function(criteria, cb) {
+    db('User').select('*').whereIn('idUser', criteria).then(function(courses) {
+      cb(null, courses);
+    }).catch(function(err) {
+      cb(err);
+    });
+  },
   createUser: function(criteria, cb) {
     auth.hashPassword(criteria.password, function(err, password) {
       if(err) {
