@@ -36,6 +36,14 @@ module.exports = function(router, DB) {
                });
                return next();
             }
+            studentCourses.forEach(function(user) {
+              delete user.password;
+              delete user.salt;
+              delete user.iteration;
+            });
+              delete teacherCourses.password;
+              delete teacherCourses.salt;
+              delete teacherCourses.iteration;
             res.json({
                success: true,
                data: {
