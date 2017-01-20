@@ -21,7 +21,8 @@ router.get('/user', function(req, res, next) {
 });
 
 router.get('/user/:id', function(req, res, next) {
-  DB.user.getUser(req.params.id, function(err, user) {
+  console.log('OIPJHZEF : ', req.params.id);
+  DB.user.getUserById(req.params.id, function(err, user) {
     if(err) {
       res.json({
          success: false,
@@ -91,6 +92,8 @@ router.put('/user/:id', function(req, res, next) {
      });
   });
 });
+
+require('./course.js')(router, DB);
 
 
 

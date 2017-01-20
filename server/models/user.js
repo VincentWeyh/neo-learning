@@ -17,10 +17,18 @@ module.exports = {
       cb(err);
     });
   },
+  getUserById: function(criteria, cb) {
+    db('User').select('*').where({idUser: criteria}).then(function(user) {
+      if(!user || !user.length) {
+        return cb('No user found');
+      }
+      cb(null, user[0]);
+    }).catch(function(err) {
+      cb(err);
+    });
+  },
   getUser: function(criteria, cb) {
-    console.log('CRITERIA : ', criteria);
     db('User').select('*').where({email: criteria}).then(function(user) {
-      console.log('USER : ', user)
       if(!user || !user.length) {
         return cb('No user found');
       }
@@ -55,9 +63,7 @@ module.exports = {
     })
   },
   deleteUser: function(criteria, cb) {
-    console.log("criteria : " , criteria)
     db('User').update({enabled: false}).where({idUser: criteria }).then(function(user) {
-      console.log("Delete : " , user)
       if(!user) {
         return cb('Delete failed');
       }
@@ -77,6 +83,7 @@ module.exports = {
         criteria.password = password.hash;
         criteria.salt = password.salt;
         criteria.iteration = password.iterations;
+        criteria.updatedAt = new Date();
         db('User').update(criteria).where({idUser: criteriaId }).then(function(user) {
           if(!user) {
             return cb('Update failed');
@@ -96,5 +103,5 @@ module.exports = {
         cb(err);
       });
     }
-  }
+  },
 }

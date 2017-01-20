@@ -59,5 +59,34 @@ router.post('/course', function(req, res, next) {
   });
 });
 
+router.put('/course/:id', function(req, res, next) {
+  DB.course.updateCourse(req.params.id, req.body, function(err) {
+    if(err) {
+      res.json({
+         success: false,
+         message: err
+       });
+       return next();
+    }
+    res.json({
+       success: true
+     });
+  });
+});
+
+router.delete('/course/:id', function(req, res, next) {
+  DB.course.deleteCourse(req.params.id, function(err) {
+    if(err) {
+      res.json({
+         success: false,
+         message: err
+       });
+       return next();
+    }
+    res.json({
+       success: true
+     });
+  });
+});
 
 module.exports = router;

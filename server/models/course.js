@@ -16,6 +16,13 @@ module.exports = {
       cb(err);
     });
   },
+  listCoursesIn: function(criteria, cb) {
+    db('Course').select('*').whereIn('idCourse', criteria).then(function(courses) {
+      cb(null, courses);
+    }).catch(function(err) {
+      cb(err);
+    });
+  },
   getCourse: function(criteria, cb) {
     db('Course').select('*').where({idCourse: criteria}).then(function(courses) {
       if(!courses || !courses.length) {
@@ -32,6 +39,27 @@ module.exports = {
         return cb('Insert course error');
       }
       cb(null, course[0]);
+    }).catch(function(err) {
+      cb(err);
+    });
+  },
+  updateCourse: function(criteriaId, criteria,  cb) {
+    criteria.updatedAt = new Date();
+    db('Course').update(criteria).where({idCourse: criteriaId }).then(function(user) {
+      if(!user) {
+        return cb('Update failed');
+      }
+      cb(null);
+    }).catch(function(err) {
+      cb(err);
+    });
+  },
+  deleteCourse: function(criteria, cb) {
+    db('Course').update({enabled: false}).where({idCourse: criteria }).then(function(course) {
+      if(!course) {
+        return cb('Delete course failed');
+      }
+      cb(null);
     }).catch(function(err) {
       cb(err);
     });
