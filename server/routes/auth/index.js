@@ -33,16 +33,17 @@ router.post('/auth', function(req, res, next) {
   if(!req.body || !req.body.email || !req.body.password) {
     res.json({
        success: false,
-       message: 'Missing email or password'
+       message: 'Missing email or password1'
      });
      return next();
   }
 
   DB.user.getUser({email: req.body.email}, function(err, user) {
     if(err) {
+      console.log(err);
       res.json({
          success: false,
-         message: 'Invalid email or password'
+         message: 'Invalid email or password2'
        });
        return next();
     }
@@ -59,7 +60,7 @@ router.post('/auth', function(req, res, next) {
       } else {
         res.json({
            success: false,
-           message: 'Invalid email or password'
+           message: 'Invalid email or password3'
          });
       }
     });

@@ -5,8 +5,9 @@ angular.module('NeoLearning.upload', [])
       .controller('UploadCtrl', ['$scope', 'FileUploader', function($scope, FileUploader) {
         var uploader = $scope.uploader = new FileUploader({
             //console.log('upload into UploadCtrl');
+            url: '../navigation/'
         });
-
+        console.log('uploader ',uploader);
         // FILTERS
 
         // a sync filter
