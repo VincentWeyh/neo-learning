@@ -35,11 +35,4 @@ angular.module('NeoLearning.dashboard', [])
   $scope.students = function(){
     console.log('users', UserService.api('user').get());
   }
-
-  $scope.login = function(){
-    var user = UserService('auth').post({email: $scope.email, password: $scope.password });
-    user.$promise.then(function(result){
-      $location.path('/dashboard');
-    })
-  }
 }]);

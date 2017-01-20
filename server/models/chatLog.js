@@ -1,7 +1,7 @@
 var db = require('../db.js');
 
 module.exports = {
-  listLogs: function(cb) {
+  getAllLogs: function(cb) {
     db('ChatLog').select('*').then(function(logs) {
       cb(null, logs);
     }).catch(function(err) {
