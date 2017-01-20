@@ -5,6 +5,7 @@ angular.module('NeoLearning', [
   'angular-jwt',
   'ngResource',
   'ui.router',
+  'smart-table',
   'angularFileUpload',
   'NeoLearning.signin',
   'NeoLearning.upload',

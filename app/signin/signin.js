@@ -9,7 +9,7 @@ angular.module('NeoLearning.signin', [])
     user.$promise.then(function(result){
       if(result.success){
         $window.sessionStorage.token = result.data;
-        $window.sessionStorage.user = jwtHelper.decodeToken(result.data);
+        console.log('user', user);
         $location.path('/dashboard');
       }else{
         $scope.errorMessage = 'Identifiants incorrects'

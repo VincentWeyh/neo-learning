@@ -14,6 +14,7 @@
     "html5-boilerplate": "^5.3.0",
     "kjur-jsrsasign": "jsrsasign#^7.0.0",
     "angular-jwt": "^0.1.9",
-    "angular-file-upload": "^2.4.1"
+    "angular-file-upload": "^2.4.1",
+    "angular-smart-table": "^2.1.8"
   }
 }
