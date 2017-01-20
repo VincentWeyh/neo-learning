@@ -4,12 +4,16 @@
 angular.module('NeoLearning', [
   'angular-jwt',
   'ngResource',
+  'LocalStorageModule',
   'ui.router',
   'smart-table',
   'angularFileUpload',
   'NeoLearning.signin',
   'NeoLearning.upload',
-  'NeoLearning.dashboard'
+  'NeoLearning.dashboard',
+  'NeoLearning.student',
+  'NeoLearning.document',
+  'NeoLearning.navigation'
 ]).
 config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourceProvider', function($locationProvider, $stateProvider, $urlRouterProvider, $resourceProvider) {
 
@@ -30,16 +34,54 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
     url: '/dashboard',
     views : {
       'container': { templateUrl: '/dashboard/dashboard.html', controller: 'DashCtrl'},
-      'nav': { templateUrl: 'shared/navigation/navigation.html'}
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
     },
     authenticate: true,
   })
   $stateProvider.state('upload', {
-    url: '/upload',
+    url: '/dasboard/upload',
     views : {
-      'container': { templateUrl: '/upload/upload.html', controller: 'UploadCtrl'},
-      'nav': { templateUrl: 'shared/navigation/navigation.html'}
+      'container': { templateUrl: 'dashboard/upload/upload.html', controller: 'UploadCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
     },
+    authenticate: true,
+  })
+  $stateProvider.state('students', {
+    url: '/dasboard/students',
+    views : {
+      'container': { templateUrl: 'dashboard/student/students.html', controller: 'StudentCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
+    },
+    authenticate: true,
+  })
+  $stateProvider.state('student', {
+    url: '/dasboard/student?id',
+    views : {
+      'container': { templateUrl: 'dashboard/student/student.html', controller: 'StudentCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
+    },
+    // params: {
+    //   student: null
+    // },
+    authenticate: true,
+  })
+  $stateProvider.state('courses', {
+    url: '/dasboard/courses',
+    views : {
+      'container': { templateUrl: 'dashboard/course/courses.html', controller: 'CourseCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
+    },
+    authenticate: true,
+  })
+  $stateProvider.state('course', {
+    url: '/dasboard/course?id',
+    views : {
+      'container': { templateUrl: 'dashboard/course/course.html', controller: 'CourseCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
+    },
+    // params: {
+    //   course: null
+    // },
     authenticate: true,
   })
 

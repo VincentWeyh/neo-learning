@@ -1,38 +1,60 @@
 'use strict';
 
 angular.module('NeoLearning.dashboard', [])
-.controller('DashCtrl', ['$scope', '$location', '$window', 'UserService', function($scope, $location, $window, UserService) {
+.controller('DashCtrl', ['$scope', '$state', '$window', '$filter', 'UserService', 'CourseService', function($scope, $state, $window, $filter, UserService, CourseService) {
 
+  // GET USER INFO
   var user = UserService.getUser($window.sessionStorage.token);
-
   if(user){
       $scope.userName = user.firstName;
   }
 
-  // $scope.students  = [];
-
-  var students = [];
-
-  var users = UserService.api('user').get();
-  users.$promise.then(function(result){
+  // GET STUDENTS
+  $scope.displayedStudents = [];
+  var usersRequest = UserService.api('user').get();
+  usersRequest.$promise.then(function(result){
     if(result.success){
-      fillStudentsTable(result.data);
+      console.log(result.data);
+      $scope.displayedStudents = result.data;
+      $scope.rowStudents = result.data;
+      // fillStudentsTable(result.data);
     }else{
       //ERROR
     }
   })
 
   function fillStudentsTable(users){
-    angular.forEach(users, function(user, key) {
+    angular.forEach(users, function(user) {
       this.push(user);
     }, students);
     $scope.students = students;
-    console.log('students', $scope.students);
   }
 
-  console.log('Example collection', $scope.rowCollection);
+  // GET COURSES
+  $scope.displayedCourses = [];
+  var coursesRequest = CourseService.api('course').get();
+  coursesRequest.$promise.then(function(result){
+    if(result.success){
+      $scope.displayedCourses = result.data;
+      $scope.rowCourses = result.data;
+    }
+    else{
+      // ERROR
+    }
+  })
 
-  $scope.students = function(){
-    console.log('users', UserService.api('user').get());
-  }
+  // GET USER COURSES
+  var userCourse = CourseService.api('user/' + user.idUser + '/course').get();
+
+  //GO TO USER DETAIL
+  $scope.goToStudentDetail = function(user) {
+    $state.go("student", { id: user.idUser });
+  };
+
+  // GO TO COURSE DETAIL
+  $scope.goToCourseDetail = function(course) {
+    $state.go("course", { id: course.idCourse });
+  };
+
+
 }]);
