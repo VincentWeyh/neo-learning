@@ -55,5 +55,49 @@ module.exports = function(router, DB) {
          });
       });
     });
+  }),
+
+  router.post('/course/:id/user', function(req, res, next) {
+    var criteria = [];
+    console.log('body : ', req.body);
+    req.body.idUsers.forEach(function(idUser) {
+      criteria.push({idUser: idUser, idCourse: req.params.id});
+    });
+    DB.userCourse.createUserCourses(criteria, function(err, users) {
+      if(err) {
+        res.json({
+           success: false,
+           message: 'Failed load users'
+         });
+         return next();
+      }
+      res.json({
+         success: true,
+         data: users
+       });
+    });
+  }),
+  router.delete('/course/:id/user', function(req, res, next) {
+    var criteria = [];
+    console.log('body : ', req.body);
+    req.body.idUsers.forEach(function(idUser) {
+      criteria.push({idUser: idUser, idCourse: req.params.id});
+    });
+    DB.userCourse.disableUserCourses(criteria, function(err, users) {
+      if(err) {
+        res.json({
+           success: false,
+           message: 'Failed load users'
+         });
+         return next();
+      }
+      res.json({
+         success: true,
+         data: users
+       });
+    });
   });
+
+
+
 }
