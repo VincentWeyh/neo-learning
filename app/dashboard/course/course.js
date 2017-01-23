@@ -20,7 +20,6 @@ angular.module('NeoLearning.document', [])
     if(result.success){
       $scope.displayedCourses = result.data;
       $scope.rowCourses = result.data;
-      // fillStudentsTable(result.data);
     }else{
       //ERROR
     }
@@ -35,7 +34,6 @@ angular.module('NeoLearning.document', [])
     if(result.success){
       $scope.displayedStudents = result.data;
       $scope.rowStudents = result.data;
-      // fillStudentsTable(result.data);
     }else{
       //ERROR
     }
@@ -44,23 +42,25 @@ angular.module('NeoLearning.document', [])
   $scope.addStudent = function(student){
     if(addedStudents.length > 0){
     for(var i = 0; i < addedStudents.length; i++) {
-        if (addedStudents[i].idUser == student.idUser) {
+        if (addedStudents[i] == student.idUser) {
           addedStudents.splice(i,1);
           break;
         }
         else
         {
-          addedStudents.push(student);
+          addedStudents.push(student.idUser);
+          break;
         }
       }
     }else{
-      addedStudents.push(student);
+      addedStudents.push(student.idUser);
     }
   }
 
   $scope.addCourse = function(course){
     console.log('addcourse');
-    console.log('courseName', $scope.courseName);
+      console.log('addcourse' , addedStudents);
+      /*console.log('courseName', $scope.courseName);
     console.log('courseDescription', $scope.courseDescription);
     var courseAddRequest = CourseService.api('course').post({label: $scope.courseName, description: $scope.courseDescription });
     courseAddRequest.$promise.then(function(result){
@@ -71,6 +71,7 @@ angular.module('NeoLearning.document', [])
          if(result.success){
            console.log('result', result.data);
            $scope.displayedCourses.push(result.data);
+           $scope.rowCourses.push(result.data);
            $('#addCourseModal').modal('hide')
          }
        })
@@ -79,13 +80,15 @@ angular.module('NeoLearning.document', [])
       {
         console.log('result error', result);
       }
-    })
+    })*/
   }
 
   $scope.removeCourse = function(course){
+    console.log('deletedcourse', course);
     var courseDeleteRequest = CourseService.api('course/' + course.idCourse).remove();
     courseDeleteRequest.$promise.then(function(result){
       if(result.success){
+        console.log('result', result.data);
         var index = $scope.rowCourses.indexOf(course);
           if(index !== -1){
             $scope.rowCourses.splice(index, 1);

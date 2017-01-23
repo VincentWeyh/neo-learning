@@ -89,4 +89,7 @@ router.delete('/course/:id', function(req, res, next) {
   });
 });
 
+
+require('./user.js')(router, DB);
+
 module.exports = router;
