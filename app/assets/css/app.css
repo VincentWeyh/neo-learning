@@ -305,7 +305,23 @@ video#bgvid {
     content: '\25BC';
 }
 
+
+.st-selected, .st-selected:hover{
+  background-color: #036564 !important;
+  color: white;
+}
+
 .selectable-row:hover{
   background-color: #1C2B36 !important;
   color: white;
+}
+
+/***********************
+
+      SMARTABLE
+
+************************/
+
+.studentRegistred{
+  max-height: 150px;
 }

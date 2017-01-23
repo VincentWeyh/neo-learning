@@ -39,9 +39,9 @@
                         </div>
                     </div>
                 </div>
-                <a href="#/dashboard/course">
+                <a ui-sref="courses">
                     <div class="panel-footer">
-                        <span class="pull-left">Voir les classes</span>
+                        <span class="pull-left">Gérer les classes</span>
                         <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                         <div class="clearfix"></div>
                     </div>
@@ -63,7 +63,7 @@
                 </div>
                 <a href="#/dashboard">
                     <div class="panel-footer">
-                        <span class="pull-left">Voir les examens</span>
+                        <span class="pull-left">Gérer les examens</span>
                         <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                         <div class="clearfix"></div>
                     </div>
@@ -85,7 +85,7 @@
                 </div>
                 <a href="#/dashboard">
                     <div class="panel-footer">
-                        <span class="pull-left">Voir vos documents</span>
+                        <span class="pull-left">Gérer vos documents</span>
                         <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                         <div class="clearfix"></div>
                     </div>
@@ -107,7 +107,7 @@
                 </div>
                 <a href="#/dashboard">
                     <div class="panel-footer">
-                        <span class="pull-left">Utiliser le chat</span>
+                        <span class="pull-left">Accéder au chat</span>
                         <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                         <div class="clearfix"></div>
                     </div>
@@ -138,7 +138,7 @@
                           </tr>
                       	</thead>
                       	<tbody>
-                        	<tr class="selectable-row" ng-click="goToCourseDetail(course)"  ng-repeat="course in displayedCourses">
+                        	<tr ng-if="course.enabled == true" class="selectable-row" ng-click="goToCourseDetail(course)"  ng-repeat="course in displayedCourses">
                         		<td>{{course.label}}</td>
                         		<td>{{course.description}}</td>
                         		<td>{{course.createdAt}}</td>
@@ -148,7 +148,7 @@
                       </table>
                     </div>
                     <div class="text-right">
-                        <a href="#/dashboard/course"> Voir toutes les classes <i class="fa fa-arrow-circle-right"></i></a>
+                        <a ui-sref="courses"> Voir toutes les classes <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>
