@@ -4,11 +4,14 @@ angular.module('NeoLearning.upload', [])
 
       .controller('UploadCtrl', ['$scope', 'FileUploader', function($scope, FileUploader) {
         var uploader = $scope.uploader = new FileUploader({
-            //console.log('upload into UploadCtrl');
+            url: 'http://localhost:7029/document',
+            formData: [{
+              idUserCourse: 1,
+              idCourse: 1,
+              description: 'desc'
+            }]
         });
-
         // FILTERS
-
         // a sync filter
         uploader.filters.push({
             name: 'syncFilter',

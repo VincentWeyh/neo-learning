@@ -98,6 +98,4 @@ module.exports = function(router, DB) {
     });
   });
 
-
-
 }
