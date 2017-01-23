@@ -29,4 +29,14 @@ module.exports = {
       cb(err);
     });
   },
+  listDocumentsByCourse: function(criteria, cb) {
+    db('Document').select('*').leftJoin('UserCourse', 'Document.idUserCourse', '=', 'UserCourse.idUserCourse').where('UserCourse.idCourse', '=', criteria).then(function(documents) {
+      console.log('DOCUMENTS : ', documents);
+      cb(null, documents);
+    }).catch(function(err) {
+      console.log('DOCUMENTS ERR : ', err);
+
+      cb(err);
+    });
+  },
 }

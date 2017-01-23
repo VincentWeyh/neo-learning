@@ -50,4 +50,20 @@ router.post('/document', function(req, res, next) {
 
 });
 
+router.get('/document/:id', function(req, res, next) {
+  DB.document.listDocumentsByCourse(req.params.id, function(err, documents) {
+    if(err) {
+      res.json({
+         success: false,
+         message: 'Failed load documents'
+       });
+       return next();
+    }
+    res.json({
+       success: true,
+       data: documents
+     });
+  });
+});
+
 module.exports = router;

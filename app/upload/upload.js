@@ -6,8 +6,8 @@ angular.module('NeoLearning.upload', [])
         var uploader = $scope.uploader = new FileUploader({
             url: 'http://localhost:7029/document',
             formData: [{
-              idUserCourse: 1,
-              idCourse: 1,
+              idUserCourse: 1111,
+              idCourse: 1111,
               description: 'desc'
             }]
         });
