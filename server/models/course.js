@@ -1,5 +1,6 @@
 var db = require('../db.js');
-
+var Client = require('ftp');
+var fs = require('fs');
 
 module.exports = {
   getAllCourses: function(cb) {
@@ -38,7 +39,24 @@ module.exports = {
       if(!course || !course.length) {
         return cb('Insert course error');
       }
-      cb(null, course[0]);
+      var c = new Client();
+      c.on('ready', function() {
+        c.mkdir('neo-learning/' + course[0], function(err) {
+          if (err) {
+            return cb(err);
+          }
+          c.end();
+          return cb(null, course[0]);
+        });
+      });
+      c.connect({
+        host: '192.168.1.85',
+        port: 21,
+        user: 'test',
+        password: 'test',
+        secure: true,
+        secureOptions: {rejectUnauthorized:false}
+      });
     }).catch(function(err) {
       cb(err);
     });

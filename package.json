@@ -40,20 +40,21 @@
     "update-index-async": "node -e \"var fs=require('fs'),indexFile='app/index-async.html',loaderFile='app/bower_components/angular-loader/angular-loader.min.js',loaderText=fs.readFileSync(loaderFile,'utf-8').split(/sourceMappingURL=angular-loader.min.js.map/).join('sourceMappingURL=bower_components/angular-loader/angular-loader.min.js.map'),indexText=fs.readFileSync(indexFile,'utf-8').split(/\\/\\/@@NG_LOADER_START@@[\\s\\S]*\\/\\/@@NG_LOADER_END@@/).join('//@@NG_LOADER_START@@\\n'+loaderText+'    //@@NG_LOADER_END@@');fs.writeFileSync(indexFile,indexText);\""
   },
   "dependencies": {
-    "bootstrap": "^3.3.7",
-    "jquery": "^3.1.1",
     "body-parser": "^1.16.0",
+    "bootstrap": "^3.3.7",
     "ent": "^2.2.0",
-    "express": "^4.14.0",
+    "express": "~4.14.0",
     "fs": "0.0.1-security",
+    "ftp": "^0.3.10",
+    "jquery": "^3.1.1",
     "jsonwebtoken": "^7.2.1",
     "knex": "^0.12.6",
     "lodash": "^4.17.4",
+    "multer": "^1.2.1",
     "passport": "^0.3.2",
     "passport-jwt": "^2.2.1",
     "path": "^0.12.7",
     "pg": "^6.1.2",
-    "express": "~4.14.0",
     "socket.io": "^1.7.2"
   }
 }

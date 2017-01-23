@@ -41,7 +41,6 @@ module.exports = {
   },
 
   comparePassword: function(passwordAttempt, savedHash, savedSalt, savedIterations, cb) {
-    console.log('SALT : ', savedSalt);
     crypto.pbkdf2(passwordAttempt, savedSalt, savedIterations, 512, 'sha512', function(err, hash) {
       if(err) {
         return cb(err);
