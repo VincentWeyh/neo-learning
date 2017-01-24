@@ -117,7 +117,7 @@ angular.module('NeoLearning.course', [])
     documentRequest.$promise.then(function(result){
       console.log('TATA : ' ,result.data);
       if(result.success){
-
+          
       }
     })
 

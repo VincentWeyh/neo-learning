@@ -1,16 +1,33 @@
 'use strict';
 
 angular.module('NeoLearning.upload', [])
+      .controller('UploadCtrl', ['$scope', '$stateParams', '$window', 'FileUploader', 'UserService', 'UserCourseService', function($scope, $stateParams, $window, FileUploader, UserService, UserCourseService) {
 
-      .controller('UploadCtrl', ['$scope', 'FileUploader', function($scope, FileUploader) {
+        // COURSE ID (URL)
+        var courseId = $stateParams.id;
+
+        // GET USER INFO
+        var user = UserService.getUser($window.sessionStorage.token);
+        if(user){
+          //on recupere le userId
+
+            var userID = user.idUser;
+
+        }
+        // on recupere le idUserCourse
+        var idUserCourse = UserCourseService.api('userCourse/'+ userID + '/' + courseId).get();
+
+        console.log('idUserCourse --->',idUserCourse.data);
         var uploader = $scope.uploader = new FileUploader({
             url: 'http://localhost:7029/document',
             formData: [{
-              idUserCourse: 1111,
-              idCourse: 1111,
+              idUserCourse: idUserCourse.data,
+              idCourse: courseId,
               description: 'desc'
             }]
         });
+        // console.log('$stateParams --->',$stateParams);
+
         // FILTERS
         // a sync filter
         uploader.filters.push({
