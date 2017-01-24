@@ -14,7 +14,8 @@ angular.module('NeoLearning', [
   'NeoLearning.student',
   'NeoLearning.document',
   'NeoLearning.course',
-  'NeoLearning.navigation'
+  'NeoLearning.navigation',
+  'ngFileSaver'
 ]).
 config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourceProvider', function($locationProvider, $stateProvider, $urlRouterProvider, $resourceProvider) {
 

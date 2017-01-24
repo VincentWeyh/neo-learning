@@ -1,6 +1,7 @@
 var db = require('../db.js');
 var Client = require('ftp');
 var fs = require('fs');
+var cycle = require('cycle');
 
 
 module.exports = {
@@ -33,7 +34,6 @@ module.exports = {
   },
   listDocumentsByCourse: function(criteria, cb) {
     db('Document').select('*').leftJoin('UserCourse', 'Document.idUserCourse', '=', 'UserCourse.idUserCourse').where('UserCourse.idCourse', '=', criteria).then(function(documents) {
-      console.log('DOCUMENTS : ', documents);
       cb(null, documents);
     }).catch(function(err) {
       console.log('DOCUMENTS ERR : ', err);
@@ -42,10 +42,7 @@ module.exports = {
     });
   },
   getDocument: function(criteria, cb) {
-    console.log('DOCUMENTS : ', criteria);
-
     db('Document').select('*').where({idDocument: criteria }).then(function(documents) {
-      console.log('DOCUMENTS : ', documents);
       cb(null, documents);
     }).catch(function(err) {
       console.log('DOCUMENTS ERR : ', err);
@@ -55,7 +52,6 @@ module.exports = {
   },
 
   downloadDocument: function(criteria, cb) {
-    console.log('criteria', criteria );
     db('Document').select('*').where({idDocument: criteria }).then(function(document) {
       console.log('document', document[0] );
       var c = new Client();
@@ -63,7 +59,9 @@ module.exports = {
         console.log('RADY', document[0].url  ,  document[0].fileName );
         c.get(document[0].url + document[0].fileName, function(err, file) {
           if (err) console.log('err' , err);
-          c.end();
+          file.once('close', function () {
+            c.end();
+          });
           cb(null, file);
         });
       });

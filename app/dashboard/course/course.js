@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('NeoLearning.course', [])
-.controller('CourseCtrl', ['$scope', '$stateParams',  '$window', '$filter', 'UserService', 'CourseService', 'DocumentService' ,function($scope, $stateParams, $window, $filter, UserService, CourseService, DocumentService) {
+angular.module('NeoLearning.course', ['ngFileSaver'])
+.controller('CourseCtrl', ['$scope', '$stateParams',  '$window', '$filter', 'UserService', 'CourseService', 'DocumentService' , 'FileSaver' ,function($scope, $stateParams, $window, $filter, UserService, CourseService, DocumentService, FileSaver) {
   $scope.courseId = $stateParams.id;
 
   var addedStudents = [];
@@ -115,10 +115,10 @@ angular.module('NeoLearning.course', [])
     console.log('document', document);
     var documentRequest = DocumentService.api('document/' + document.idDocument ).get();
     documentRequest.$promise.then(function(result){
-      console.log('TATA : ' ,result.data);
-      if(result.success){
-
-      }
+     var blob = new Blob([result], { type: 'text/plain' });
+     //FileSaver.saveAs(data, document.originalName);
+     var url = $window.URL || $window.webkitURL;
+     $scope.fileUrl = url.createObjectURL(blob);
     })
 
   }

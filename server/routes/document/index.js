@@ -4,6 +4,7 @@ var DB = require('../../models.js');
 var multer  = require('multer');
 var Client = require('ftp');
 var fs = require('fs');
+var cycle = require('cycle');
 var upload = multer({ dest: './' }).any();
 
 router.post('/document', function(req, res, next) {
@@ -75,12 +76,8 @@ router.get('/document/:id', function(req, res, next) {
        });
        return next();
     }
-    console.log('FINAL DOC : ', document);
-    res.json({
-       success: true,
-       data: document
-     });
-  });
+      document.pipe(res);
+    });
 });
 
 module.exports = router;

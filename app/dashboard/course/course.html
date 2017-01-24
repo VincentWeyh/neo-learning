@@ -139,10 +139,11 @@
             <td></td>
             <td></td>
             <td>
-              <button type="button" ng-click="download(document)" class="btn btn-sm btn-info">
-                <i class="glyphicon glyphicon-download-alt">
+              <a download="file.txt" ng-click="download(document)" class="btn btn-sm btn-info">   <i class="glyphicon glyphicon-download-alt">
                 </i>
-              </button>
+                <a ng-href="{{ fileUrl }}" download="file.txt">download</a>
+
+              </a>
             </td>
           </tr>
         </tbody>
