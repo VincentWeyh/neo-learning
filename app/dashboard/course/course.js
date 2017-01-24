@@ -14,12 +14,12 @@ angular.module('NeoLearning.course', ['ngFileSaver'])
   }
   // GET documents
    $scope.displayedDocuments = [];
-   var documentsRequest = DocumentService.api('documents/' + $scope.courseId ).get();
-   documentsRequest.$promise.then(function(result){
-     if(result.success){
+   var documentsRequest = DocumentService.get('documents/' + $scope.courseId );
+   documentsRequest.then(function(result){
+     if(result.status){
        console.log('result.data',result.data);
-       $scope.displayedDocuments = result.data;
-       $scope.rowDocuments = result.data;
+       $scope.displayedDocuments = result.data.data;
+       $scope.rowDocuments = result.data.data;
        // fillStudentsTable(result.data);
      }else{
        //ERROR
@@ -112,15 +112,15 @@ angular.module('NeoLearning.course', ['ngFileSaver'])
   }
 
   $scope.download = function(document){
-    console.log('document', document);
-    var documentRequest = DocumentService.api('document/' + document.idDocument ).get();
-    documentRequest.$promise.then(function(result){
-     var blob = new Blob([result], { type: 'text/plain' });
-     //FileSaver.saveAs(data, document.originalName);
-     var url = $window.URL || $window.webkitURL;
-     $scope.fileUrl = url.createObjectURL(blob);
+    var documentRequest = DocumentService.download('document/' + document.idDocument  );
+    documentRequest.then(function(result){
+      if(result.status){
+         var blob = new Blob([result.data], { type: 'application/octet-stream' });
+         FileSaver.saveAs(blob, document.originalName);
+      }else{
+        //ERROR
+      }
     })
-
   }
 
 }]);

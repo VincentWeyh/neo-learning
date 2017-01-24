@@ -1,18 +1,31 @@
 'use strict';
 
 angular.module("NeoLearning")
-.factory('DocumentService', ['$resource', function ($resource) {
+.factory('DocumentService', ['$http', function ($http) {
         return {
-          documents: null,
+          // api: function(url, data) {
+            // return
+            // {
+              post: function(url, data) {
+                    return $http({
+                      method: 'GET',
+                      url: 'http://localhost\:7029/' + url,
+                      data: data
+                    })
+              },
 
-          api: function(url){
-            return $resource('http://localhost\:7029/' + url, {}, {
-                  post: { method: "POST"},
-                  get: { method: "GET"},
-                  remove: { method: "DELETE"},
-                  update: { method: "PUT"},
-              });
-          }
-        }
-      }
-]);
+              get: function(url) {
+                    return $http({
+                      method: 'GET',
+                      url: 'http://localhost\:7029/' + url
+                    })
+              },
+              download: function(url) {
+                    return $http({
+                      method: 'GET',
+                      url: 'http://localhost\:7029/' + url,
+                      responseType: 'blob'
+                    })
+              }
+            }
+}]);
