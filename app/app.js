@@ -4,10 +4,17 @@
 angular.module('NeoLearning', [
   'angular-jwt',
   'ngResource',
+  'LocalStorageModule',
   'ui.router',
+  'smart-table',
   'angularFileUpload',
   'NeoLearning.signin',
-  'NeoLearning.upload'
+  'NeoLearning.upload',
+  'NeoLearning.dashboard',
+  'NeoLearning.student',
+  'NeoLearning.document',
+  'NeoLearning.course',
+  'NeoLearning.navigation'
 ]).
 config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourceProvider', function($locationProvider, $stateProvider, $urlRouterProvider, $resourceProvider) {
 
@@ -21,22 +28,75 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
          '<img class="logo" src="assets/images/neo_logo.png"></img>' +
        '</div>'}
     },
+    authenticate: false
   })
 
   $stateProvider.state('dashboard', {
     url: '/dashboard',
     views : {
-      'container': { templateUrl: '/dashboard/dashboard.html', controller: 'SigninCtrl'},
-      'nav': { templateUrl: 'shared/navigation/navigation.html'}
+      'container': { templateUrl: '/dashboard/dashboard.html', controller: 'DashCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
     },
+    authenticate: true,
   })
   $stateProvider.state('upload', {
-    url: '/upload',
+    url: '/dashboard/upload',
     views : {
-      'container': { templateUrl: '/upload/upload.html', controller: 'UploadCtrl'},
-      'nav': { templateUrl: 'shared/navigation/navigation.html'}
+      'container': { templateUrl: 'dashboard/upload/upload.html', controller: 'UploadCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
     },
+    authenticate: true,
   })
+  $stateProvider.state('students', {
+    url: '/dashboard/students',
+    views : {
+      'container': { templateUrl: 'dashboard/student/students.html', controller: 'StudentCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
+    },
+    authenticate: true,
+  })
+  $stateProvider.state('student', {
+    url: '/dashboard/student?id',
+    views : {
+      'container': { templateUrl: 'dashboard/student/student.html', controller: 'StudentCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
+    },
+    // params: {
+    //   student: null
+    // },
+    authenticate: true,
+  })
+  $stateProvider.state('courses', {
+    url: '/dashboard/courses',
+    views : {
+      'container': { templateUrl: 'dashboard/course/courses.html', controller: 'CourseCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
+    },
+    authenticate: true,
+  })
+  $stateProvider.state('course', {
+    url: '/dashboard/course?id',
+    views : {
+      'container': { templateUrl: 'dashboard/course/course.html', controller: 'CourseCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
+    },
+    // params: {
+    //   course: null
+    // },
+    authenticate: true,
+  })
+  // $stateProvider.state('coursedocuments', {
+  //   url: '/dashboard/course?id/documents',
+  //   views : {
+  //     'container': { templateUrl: 'dashboard/document/documents.html', controller: 'DocumentCtrl'},
+  //     'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
+  //   },
+  //   // params: {
+  //   //   course: null
+  //   // },
+  //   authenticate: true,
+  // })
+
 
   $resourceProvider.defaults.actions = {
       create: {method: 'POST'},
@@ -45,4 +105,14 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
       update: {method: 'PUT'},
       delete: {method: 'DELETE'}
     };
-}]);
+}])
+.run(function ($rootScope, $state, UserService) {
+  $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
+    console.log("route changed", UserService.isAuth());
+    if (toState.authenticate && !UserService.isAuth()){
+      // User isn’t authenticated
+      $state.transitionTo("signin");
+      event.preventDefault();
+    }
+  });
+});

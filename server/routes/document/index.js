@@ -50,7 +50,7 @@ router.post('/document', function(req, res, next) {
 
 });
 
-router.get('/document/:id', function(req, res, next) {
+router.get('/documents/:id', function(req, res, next) {
   DB.document.listDocumentsByCourse(req.params.id, function(err, documents) {
     if(err) {
       res.json({
@@ -62,6 +62,23 @@ router.get('/document/:id', function(req, res, next) {
     res.json({
        success: true,
        data: documents
+     });
+  });
+});
+
+router.get('/document/:id', function(req, res, next) {
+  DB.document.downloadDocument(req.params.id, function(err, document) {
+    if(err) {
+      res.json({
+         success: false,
+         message: 'Failed load document'
+       });
+       return next();
+    }
+    console.log('FINAL DOC : ', document);
+    res.json({
+       success: true,
+       data: document
      });
   });
 });

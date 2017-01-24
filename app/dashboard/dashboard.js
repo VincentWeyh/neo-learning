@@ -1,18 +1,54 @@
 'use strict';
 
 angular.module('NeoLearning.dashboard', [])
-// Signin controller
-.controller('DashCtrl', ['$scope', '$location' , 'UserService', function($scope, $location, UserService) {
-  $scope.students = function(){
+.controller('DashCtrl', ['$scope', '$state', '$window', '$filter', 'UserService', 'CourseService', function($scope, $state, $window, $filter, UserService, CourseService) {
 
+  // GET USER INFO
+  var user = UserService.getUser($window.sessionStorage.token);
+  if(user){
+      $scope.userName = user.firstName;
   }
 
-  $scope.login = function(){
-    var user = UserService('auth').post({email: $scope.email, password: $scope.password });
-    user.$promise.then(function(result){
-      var decryptedToken = jwtHelper.decodeToken(result.data)
-      console.log(decryptedToken);
-      $location.path('/dashboard');
-    })
-  }
+  // GET STUDENTS
+  $scope.displayedStudents = [];
+  var usersRequest = UserService.api('user').get();
+  usersRequest.$promise.then(function(result){
+    if(result.success){
+      console.log('usersRequest :' , result.data);
+      $scope.displayedStudents = result.data;
+      $scope.rowStudents = result.data;
+      // fillStudentsTable(result.data);
+    }else{
+      //ERROR
+    }
+  })
+
+  // GET COURSES
+  $scope.displayedCourses = [];
+  var coursesRequest = CourseService.api('course').get();
+  coursesRequest.$promise.then(function(result){
+    if(result.success){
+      $scope.displayedCourses = result.data;
+      $scope.rowCourses = result.data;
+    }
+    else{
+      // ERROR
+    }
+  })
+
+  // GET USER COURSES
+  var userCourse = CourseService.api('user/' + user.idUser + '/course').get();
+
+  //GO TO USER DETAIL
+  $scope.goToStudentDetail = function(user) {
+    $state.go("student", { id: user.idUser });
+  };
+
+  // GO TO COURSE DETAIL
+  $scope.goToCourseDetail = function(course) {
+    $state.go("course", { id: course.idCourse });
+  };
+
+
+
 }]);
