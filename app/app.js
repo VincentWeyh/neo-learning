@@ -16,7 +16,8 @@ angular.module('NeoLearning', [
   'NeoLearning.course',
   'NeoLearning.chat',
   'NeoLearning.navigation',
-  'btford.socket-io'
+  'btford.socket-io',
+  'ngFileSaver'
 ]).
 config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourceProvider', function($locationProvider, $stateProvider, $urlRouterProvider, $resourceProvider) {
 
@@ -42,7 +43,7 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
     authenticate: true,
   })
   $stateProvider.state('upload', {
-    url: '/dasboard/upload',
+    url: '/dashboard/upload',
     views : {
       'container': { templateUrl: 'dashboard/upload/upload.html', controller: 'UploadCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
@@ -50,7 +51,7 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
     authenticate: true,
   })
   $stateProvider.state('students', {
-    url: '/dasboard/students',
+    url: '/dashboard/students',
     views : {
       'container': { templateUrl: 'dashboard/student/students.html', controller: 'StudentCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
@@ -58,7 +59,7 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
     authenticate: true,
   })
   $stateProvider.state('student', {
-    url: '/dasboard/student?id',
+    url: '/dashboard/student?id',
     views : {
       'container': { templateUrl: 'dashboard/student/student.html', controller: 'StudentCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
@@ -69,7 +70,7 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
     authenticate: true,
   })
   $stateProvider.state('courses', {
-    url: '/dasboard/courses',
+    url: '/dashboard/courses',
     views : {
       'container': { templateUrl: 'dashboard/course/courses.html', controller: 'CourseCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
@@ -85,14 +86,11 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
     authenticate: true,
   })
   $stateProvider.state('course', {
-    url: '/dasboard/course?id',
+    url: '/dashboard/course?id',
     views : {
       'container': { templateUrl: 'dashboard/course/course.html', controller: 'CourseCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
     },
-    // params: {
-    //   course: null
-    // },
     authenticate: true,
   })
 

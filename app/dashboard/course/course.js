@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('NeoLearning.course', [])
-.controller('CourseCtrl', ['$scope', '$stateParams',  '$window', '$filter', 'UserService', 'CourseService', function($scope, $stateParams, $window, $filter, UserService, CourseService) {
+angular.module('NeoLearning.course', ['ngFileSaver'])
+.controller('CourseCtrl', ['$scope', '$stateParams',  '$window', '$filter', 'UserService', 'CourseService', 'DocumentService' , 'FileSaver' ,function($scope, $stateParams, $window, $filter, UserService, CourseService, DocumentService, FileSaver) {
   $scope.courseId = $stateParams.id;
 
   var addedStudents = [];
@@ -12,7 +12,20 @@ angular.module('NeoLearning.course', [])
   if(user){
       $scope.userName = user.firstName;
   }
-
+  // GET documents
+   $scope.displayedDocuments = [];
+   var documentsRequest = DocumentService.get('documents/' + $scope.courseId );
+   documentsRequest.then(function(result){
+     if(result.status){
+       console.log('result.data',result.data);
+       $scope.displayedDocuments = result.data.data;
+       $scope.rowDocuments = result.data.data;
+       // fillStudentsTable(result.data);
+     }else{
+       //ERROR
+     }
+   })
+   //console.log('documentsRequest: ',documentsRequest)
   // GET STUDENTS
   $scope.displayedCourses = [];
   var coursesRequest = CourseService.api('course').get();
@@ -97,6 +110,18 @@ angular.module('NeoLearning.course', [])
       else
       {
 
+      }
+    })
+  }
+
+  $scope.download = function(document){
+    var documentRequest = DocumentService.download('document/' + document.idDocument  );
+    documentRequest.then(function(result){
+      if(result.status){
+         var blob = new Blob([result.data], { type: 'application/octet-stream' });
+         FileSaver.saveAs(blob, document.originalName);
+      }else{
+        //ERROR
       }
     })
   }
