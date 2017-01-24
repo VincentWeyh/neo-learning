@@ -121,30 +121,34 @@
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Les classes</h3>
+                    <h3 class="panel-title"><i class="fa fa-graduation-cap" aria-hidden="true"></i></i> Les classes</h3>
                 </div>
                 <div class="panel-body">
                     <div>
-                      <table st-table="displayedCourses" class="table table-striped" st-safe-src="rowCourses" >
-                      	<thead>
-                        	<tr>
-                        		<th st-sort="label">Intitulé</th>
-                        		<th st-sort="description">Description</th>
-                        		<th st-sort="createdAt">Crée</th>
-                            <!-- <th>Nombre d'élèves</th> -->
-                        	</tr>
+                      <table st-table="displayedCourses" class="table table-striped" st-safe-src="rowCourses">
+                        <thead>
                           <tr>
-                            <th colspan="5"><input st-search="" class="form-control" placeholder="Rechercher une classe ..." type="text"/></th>
+                            <th st-sort="lastName">Classe</th>
+                            <th st-sort="createdAt">Description</th>
+                            <th st-sort="createdAt">Date création</th>
+                            <th st-sort="createdAt">Date modification</th>
+                            <th st-sort="studentNb">Nb d'élèves</th>
+                            <th st-sort="examNb">Nb d'examens</th>
                           </tr>
-                      	</thead>
-                      	<tbody>
-                        	<tr ng-if="course.enabled == true" class="selectable-row" ng-click="goToCourseDetail(course)"  ng-repeat="course in displayedCourses">
-                        		<td>{{course.label}}</td>
-                        		<td>{{course.description}}</td>
-                        		<td>{{course.createdAt}}</td>
-                            <!-- <td>{{course.studentNumber}}</td> -->
-                        	</tr>
-                      	</tbody>
+                          <tr>
+                            <th colspan="9"><input st-search="" class="form-control" placeholder="Rechercher une classe ..." type="text"/></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr class="selectable-row" ng-click="goToCourseDetail(course)" ng-if="course.enabled == true" ng-repeat="course in displayedCourses">
+                            <td>{{course.label}}</td>
+                            <td>{{course.description}}</td>
+                            <td>{{course.createdAt}}</td>
+                            <td>{{course.updatedAt}}</td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                        </tbody>
                       </table>
                     </div>
                     <div class="text-right">
@@ -187,7 +191,7 @@
                     </table>
                   </div>
                   <div class="text-right">
-                      <a href="#/dashboard/course"> Voir toutes les classes <i class="fa fa-arrow-circle-right"></i></a>
+                      <a ui-sref="students"> Voir tous les élèves <i class="fa fa-arrow-circle-right"></i></a>
                   </div>
               </div>
           </div>

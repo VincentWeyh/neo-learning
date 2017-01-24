@@ -13,6 +13,7 @@ angular.module('NeoLearning', [
   'NeoLearning.dashboard',
   'NeoLearning.student',
   'NeoLearning.document',
+  'NeoLearning.course',
   'NeoLearning.navigation'
 ]).
 config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourceProvider', function($locationProvider, $stateProvider, $urlRouterProvider, $resourceProvider) {

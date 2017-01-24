@@ -7,7 +7,7 @@
             </h1>
             <ol class="breadcrumb" >
                 <li class="active" >
-                  <button type="button" data-toggle="modal" data-target="#addCourseModal" class="btn btn-sm btn-success">
+                  <button type="button" ng-click="openNewModalCourse()" class="btn btn-sm btn-success">
                     <i class="glyphicon glyphicon-remove-circle">
                     </i>
                     Ajouter une classe
@@ -18,8 +18,61 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="addCourseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="panel-body">
+  <table st-table="displayedCourses" class="table table-striped" st-safe-src="rowCourses">
+    <thead>
+      <tr>
+        <th st-sort="lastName">Classe</th>
+        <th st-sort="createdAt">Description</th>
+        <th st-sort="createdAt">Date création</th>
+        <th st-sort="createdAt">Date modification</th>
+        <th st-sort="studentNb">Nb d'élèves</th>
+        <th st-sort="examNb">Nb d'examens</th>
+        <th width="25px"></th>
+        <th width="25px"></th>
+        <th width="25px"></th>
+      </tr>
+      <tr>
+        <th colspan="9"><input st-search="" class="form-control" placeholder="Rechercher une classe ..." type="text"/></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="selectable-row" ng-if="course.enabled == true" ng-repeat="course in displayedCourses">
+        <td>{{course.label}}</td>
+        <td>{{course.description}}</td>
+        <td>{{course.createdAt}}</td>
+        <td>{{course.updatedAt}}</td>
+        <td></td>
+        <td></td>
+        <td>
+          <button type="button" ng-click="goToCourseDetail(course)" class="btn btn-sm btn-success">
+            <i class="fa fa-info-circle" aria-hidden="true"></i>
+          </button>
+        </td>
+        <td>
+          <button type="button" ng-click="openEditModalCourse(course)" class="btn btn-sm btn-info">
+            <i class="glyphicon glyphicon glyphicon-pencil">
+            </i>
+          </button>
+        </td>
+        <td>
+          <button sweetalert sweet-options="{{sweet.option}}" sweet-confirm-option="{{sweet.confirm}}"
+                  sweet-cancel-option="{{sweet.cancel}}"
+                  name="login-submit"
+                  sweet-on-cancel="checkCancel()"
+                  sweet-on-confirm="checkConfirm()"
+                  type="button" ng-click="removeCourse(course)" class="btn btn-sm btn-danger">
+            <i class="glyphicon glyphicon-remove-circle">
+            </i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- addCourse Modal -->
+<div class="modal fade" id="newModalCourse" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -36,7 +89,72 @@
           <textarea rows="4" class="form-control" name="courseDescription" ng-model="courseDescription" id="courseDescription"></textarea>
         </div>
         <div class="form-group">
-          <label for="classDescription">Élèves inscrits:</label>
+          <label for="classDescription">Élèves inscrits: {{registeredStudentCount}} </label>
+          <textarea rows="4" disabled class="studentRegistred form-control">{{addedStudentsTxt}}</textarea>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-graduation-cap"></i> Ajouter des eleves</h3>
+            </div>
+              <div>
+                <table st-table="displayedStudents" class="table table-striped" st-safe-src="rowStudents" >
+                  <thead>
+                    <tr>
+                      <th st-sort="lastName">Nom</th>
+                      <th st-sort="firstName">Prenom</th>
+                      <th st-sort="email">Email</th>
+                      <!-- <th>Détail</th> -->
+                    </tr>
+                    <tr>
+                      <th colspan="5"><input st-search="" class="form-control" placeholder="Rechercher un élève ..." type="text"/></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="selectable-row" st-select-row="student" ng-click="addStudent(student)" st-select-mode="multiple" ng-repeat="student in displayedStudents">
+                      <td>{{student.lastName}}</td>
+                      <td>{{student.firstName}}</td>
+                      <td>{{student.email}}</td>
+                      <!-- <td>{{}}</td> -->
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="5" class="text-center">
+                        <div st-pagination="" st-items-by-page="5" st-displayed-pages="3"></div>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+        <button type="button" ng-click="addCourse()" class="btn btn-success">Créer la classe</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- editCourse Modal -->
+<div class="modal fade" id="editModalCourse" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Edition d'une classe</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="courseName">Name:</label>
+          <input type="text" class="form-control" name="courseName" ng-model="selectedEditableCourse.label" value="selectedEditableCourse.label">
+        </div>
+        <div class="form-group">
+          <label for="courseDescription">Description:</label>
+          <textarea rows="4" class="form-control" name="courseDescription" ng-model="selectedEditableCourse.description" value="selectedEditableCourse.description" id="courseDescription"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="classDescription">Élèves inscrits: {{addedStudents.Count()}} </label>
           <textarea rows="4" disabled class="studentRegistred form-control">{{addedStudentsTxt}}</textarea>
         </div>
         <div class="panel panel-default">
@@ -79,50 +197,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
-        <button type="button" ng-click="addCourse(course)" class="btn btn-success">Créer la classe</button>
+        <button type="button" ng-click="editCourse()" class="btn btn-success">Editer la classe</button>
       </div>
     </div>
   </div>
-</div>
-
-<div class="panel-body">
-  <table st-table="displayedCourses" class="table table-striped" st-safe-src="rowCourses">
-    <thead>
-      <tr>
-        <th st-sort="lastName">Classe</th>
-        <th st-sort="createdAt">Description</th>
-        <th st-sort="createdAt">Date création</th>
-        <th st-sort="createdAt">Date modification</th>
-        <th st-sort="studentNb">Nb d'élèves</th>
-        <th st-sort="examNb">Nb d'examens</th>
-        <th width="25px"></th>
-        <th width="25px"></th>
-      </tr>
-      <tr>
-        <th colspan="7"><input st-search="" class="form-control" placeholder="Rechercher une classe ..." type="text"/></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="selectable-row" ng-if="course.enabled == true" ng-repeat="course in displayedCourses">
-        <td>{{course.label}}</td>
-        <td>{{course.description}}</td>
-        <td>{{course.createdAt}}</td>
-        <td>{{course.updatedAt}}</td>
-        <td></td>
-        <td></td>
-        <td>
-          <button type="button" ng-click="removeCourse(course)" class="btn btn-sm btn-danger">
-            <i class="glyphicon glyphicon-remove-circle">
-            </i>
-          </button>
-        </td>
-        <td>
-          <button type="button" ng-click="editCourse(course)" class="btn btn-sm btn-info">
-            <i class="glyphicon glyphicon glyphicon-pencil">
-            </i>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 </div>

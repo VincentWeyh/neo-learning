@@ -16,6 +16,7 @@
     "angular-jwt": "^0.1.9",
     "angular-file-upload": "^2.4.1",
     "angular-smart-table": "^2.1.8",
-    "angular-local-storage": "^0.5.2"
+    "angular-local-storage": "^0.5.2",
+    "ngSweetAlert": "angular-sweetalert#^1.1.2"
   }
 }

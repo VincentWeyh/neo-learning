@@ -95,7 +95,7 @@ body{
     text-align: center;
     border-bottom: 2px solid #E8DDCB;
     height:85px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.5);
     position: relative;
     top: 0;
 }
@@ -229,7 +229,7 @@ body{
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#033649', endColorstr='#031634',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
-video#bgvid {
+#bgvid {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -238,7 +238,7 @@ video#bgvid {
     width: auto;
     height: auto;
     z-index: -100;
-    opacity: 0.25;
+    opacity: 0.55;
     -ms-transform: translateX(-50%) translateY(-50%);
     -moz-transform: translateX(-50%) translateY(-50%);
     -webkit-transform: translateX(-50%) translateY(-50%);
@@ -305,7 +305,6 @@ video#bgvid {
     content: '\25BC';
 }
 
-
 .st-selected, .st-selected:hover{
   background-color: #036564 !important;
   color: white;
@@ -316,12 +315,58 @@ video#bgvid {
   color: white;
 }
 
+.studentRegistred{
+  max-height: 150px;
+}
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+  line-height: 30px !important;
+}
+
+.pagination{
+  margin: 0px !important;
+}
+
 /***********************
 
-      SMARTABLE
+      COURSE
 
 ************************/
 
-.studentRegistred{
-  max-height: 150px;
+.count-registered-student{
+  padding: 6px;
+  border-radius: 50%;
+  background-color: #031634;
+  color:white;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  opacity: .7;
+  transition: opacity .3s,transform .3s;
+}
+
+
+/***********************
+
+      SWEET ALERT
+
+************************/
+
+.cancel {
+  background-color: #036564 !important;
+}
+
+.confirm{
+  /*background-color: #036564 !important;*/
+}
+
+/***********************
+
+      FORMS
+
+************************/
+
+.input-group-addon{
+  background-color: #036564 !important;
+  color:white !important;
 }
