@@ -13,7 +13,10 @@ angular.module('NeoLearning', [
   'NeoLearning.dashboard',
   'NeoLearning.student',
   'NeoLearning.document',
-  'NeoLearning.navigation'
+  'NeoLearning.course',
+  'NeoLearning.chat',
+  'NeoLearning.navigation',
+  'btford.socket-io'
 ]).
 config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourceProvider', function($locationProvider, $stateProvider, $urlRouterProvider, $resourceProvider) {
 
@@ -69,6 +72,14 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
     url: '/dasboard/courses',
     views : {
       'container': { templateUrl: 'dashboard/course/courses.html', controller: 'CourseCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
+    },
+    authenticate: true,
+  })
+  $stateProvider.state('chat', {
+    url: '/dasboard/chat',
+    views : {
+      'container': { templateUrl: 'dashboard/chat/chat.html', controller: 'ChatCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
     },
     authenticate: true,

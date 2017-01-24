@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('NeoLearning.document', [])
+angular.module('NeoLearning.course', [])
 .controller('CourseCtrl', ['$scope', '$stateParams',  '$window', '$filter', 'UserService', 'CourseService', function($scope, $stateParams, $window, $filter, UserService, CourseService) {
   $scope.courseId = $stateParams.id;
 
