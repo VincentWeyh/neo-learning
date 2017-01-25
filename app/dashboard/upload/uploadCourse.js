@@ -79,20 +79,8 @@ angular.module('NeoLearning.uploadCourse', [])
                 console.info('onCancelItem', fileItem, response, status, headers);
             };
             uploader.onCompleteItem = function(fileItem, response, status, headers) {
-                //console.info('onCompleteItem', fileItem, response, status, headers);
-                console.log('----scope.displayedDocuments uploadCtrl----',$scope.displayedDocuments);
-                var documentsRequest = DocumentService.get('documents/' + courseId );
-                documentsRequest.then(function(result){
-                  if(result.status){
+                $rootScope.resfreshDocument();
 
-                    $scope.displayedDocuments = result.data.data;
-                    $scope.rowDocuments = result.data.data;
-                    // fillStudentsTable(result.data);
-                  }else{
-                    //ERROR
-                  }
-                })
-                //console.log('after $scope', $scope.displayedDocuments);
             };
             uploader.onCompleteAll = function() {
                 console.info('onCompleteAll');
@@ -103,11 +91,4 @@ angular.module('NeoLearning.uploadCourse', [])
           }
         })
 
-        // console.log('$stateParams --->',$stateParams);
-
-
-
-
-
-        // console.info('uploader', uploader);
     }]);

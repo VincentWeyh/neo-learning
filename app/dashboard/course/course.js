@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
-.controller('CourseCtrl', ['$scope', '$state', '$stateParams',  '$window', '$filter', 'UserService', 'CourseService', 'DocumentService', 'SweetAlert', 'FileSaver', function($scope, $state, $stateParams, $window, $filter, UserService, CourseService, DocumentService, SweetAlert, FileSaver) {
+.controller('CourseCtrl', ['$scope', '$rootScope', '$state', '$stateParams',  '$window', '$filter', 'UserService', 'CourseService', 'DocumentService', 'SweetAlert', 'FileSaver', function($scope, $rootScope, $state, $stateParams, $window, $filter, UserService, CourseService, DocumentService, SweetAlert, FileSaver) {
 
   $scope.courseId = $stateParams.id;
   $scope.itemsByPage=7;
@@ -12,16 +12,16 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
   // GET USER INFO
   var user = UserService.getUser($window.sessionStorage.token);
   if(user){
-      $scope.userName = user.firstName;
+    $scope.userName = user.firstName;
   }
 
-  if ($scope.courseId) {
-    // GET documents
-    $scope.displayedDocuments = [];
+
+  $rootScope.resfreshDocument = function(){
+
     var documentsRequest = DocumentService.get('documents/' + $scope.courseId );
     documentsRequest.then(function(result){
       if(result.status){
-        console.log('result.data',result.data);
+        console.log('result.data refresh',result.data);
         $scope.displayedDocuments = result.data.data;
         $scope.rowDocuments = result.data.data;
         // fillStudentsTable(result.data);
@@ -29,6 +29,12 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
         //ERROR
       }
     })
+
+  };
+
+  $scope.displayedDocuments = [];
+  if ($scope.courseId) {
+    $rootScope.resfreshDocument();
   }
 
   $scope.displayedCourses = [];
@@ -58,16 +64,16 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
     var iteration = 0;
     if(addedStudents.length > 0){
       for(var i = 0; i < addedStudents.length; i++) {
-          if (addedStudents[i].idUser == student.idUser) {
-            isFound = true;
-            iteration = i;
-          }
+        if (addedStudents[i].idUser == student.idUser) {
+          isFound = true;
+          iteration = i;
         }
-        if (isFound){
-            addedStudents.splice(iteration,1);
-        }else{
-            addedStudents.push(student);
-        }
+      }
+      if (isFound){
+        addedStudents.splice(iteration,1);
+      }else{
+        addedStudents.push(student);
+      }
     }
     else
     {
@@ -77,8 +83,8 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
     for(var i = 0; i < addedStudents.length; i++) {
       registeredStudentsNames.push(addedStudents[i].lastName);
     }
-      $scope.registeredStudentCount = addedStudents.length;
-      $scope.addedStudentsTxt = registeredStudentsNames.join(' - ');
+    $scope.registeredStudentCount = addedStudents.length;
+    $scope.addedStudentsTxt = registeredStudentsNames.join(' - ');
   }
 
   $scope.openEditModalCourse = function(selectedEditableCourse){
@@ -91,24 +97,24 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
     console.log('selectedCourse', $scope.selectedEditableCourse);
     var courseStudentAddRequest = CourseService.api('course/'+ selectedEditableCourse.idCourse +'/user').get();
     courseStudentAddRequest.$promise.then(function(result){
-     if(result.success){
+      if(result.success){
         console.log('registeredStudent', result.data.studentCourses);
         addedStudents = result.data.studentCourses;
-          for(var i = 0; i < addedStudents.length; i++) {
-            registeredStudentsNames.push(addedStudents[i].firstName);
-          }
+        for(var i = 0; i < addedStudents.length; i++) {
+          registeredStudentsNames.push(addedStudents[i].firstName);
+        }
         $scope.addedStudentsTxt = registeredStudentsNames.join(' - ')
         $('#editModalCourse').modal('show');
-     }
-   })
+      }
+    })
   }
 
   $scope.editCourse = function(){
     var courseEditRequest = CourseService.api('course/' + $scope.selectedEditableCourse.idCourse ).update({label: $scope.selectedEditableCourse.label, description: $scope.selectedEditableCourse.description});
     courseEditRequest.$promise.then(function(result){
-       if(result.success){
-         SweetAlert.swal("Classe éditée avec succès !", "", "success");
-       }
+      if(result.success){
+        SweetAlert.swal("Classe éditée avec succès !", "", "success");
+      }
       $('#editModalCourse').modal('hide');
     })
   }
@@ -127,26 +133,26 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
       if(resultId.success){
         var coursesRequest = CourseService.api('course/' + resultId.data).get();
         coursesRequest.$promise.then(function(result){
-         if(result.success){
-           $scope.displayedCourses.push(result.data);
-           $scope.rowCourses.push(result.data);
-           console.log('courseId', resultId.data);
-           console.log('addedStudent', addedStudents);
-           var addedStudentsId = [];
-           addedStudents.forEach(function(value, key){
-             addedStudentsId.push(value.idUser);
-           })
-           var usersCourseAddRequest = CourseService.api('course/' + resultId.data + '/user').post({ idUsers: addedStudentsId});
-           usersCourseAddRequest.$promise.then(function(result){
-             if(result.success){
-               SweetAlert.swal("La classe " + $scope.courseName + " ajoutée avec succès !", "", "success");
-             }else{
-               SweetAlert.swal("Une erreur est survenue (" + result + ")", "", "error");
-             }
-           })
-           $('#newModalCourse').modal('hide');
-         }
-       })
+          if(result.success){
+            $scope.displayedCourses.push(result.data);
+            $scope.rowCourses.push(result.data);
+            console.log('courseId', resultId.data);
+            console.log('addedStudent', addedStudents);
+            var addedStudentsId = [];
+            addedStudents.forEach(function(value, key){
+              addedStudentsId.push(value.idUser);
+            })
+            var usersCourseAddRequest = CourseService.api('course/' + resultId.data + '/user').post({ idUsers: addedStudentsId});
+            usersCourseAddRequest.$promise.then(function(result){
+              if(result.success){
+                SweetAlert.swal("La classe " + $scope.courseName + " ajoutée avec succès !", "", "success");
+              }else{
+                SweetAlert.swal("Une erreur est survenue (" + result + ")", "", "error");
+              }
+            })
+            $('#newModalCourse').modal('hide');
+          }
+        })
       }
       else
       {
@@ -157,56 +163,56 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
 
   $scope.removeCourse = function(course){
     SweetAlert.swal({
-          title: "Êtes-vous sûr de vouloir supprimer la classe " + course.label + "?",
-          text: "Vous ne pourrez pas restaurer cette classe !",
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#DD6B55",
-          confirmButtonText: "Oui, supprimer la classe!",
-          cancelButtonText: "Annuler",
-          closeOnConfirm: false,
-          closeOnCancel: false
-      },
-      function(isConfirm){
-          if(isConfirm){
-            var courseDeleteRequest = CourseService.api('course/' + course.idCourse).remove();
-            courseDeleteRequest.$promise.then(function(result){
-              if(result.success){
-                var index = $scope.rowCourses.indexOf(course);
-                  if(index !== -1){
-                    $scope.rowCourses.splice(index, 1);
-                  }
-                  SweetAlert.swal("Classe supprimée !", "", "success");
-              }
-              else
-              {
-                SweetAlert.swal("Erreur lors de la suppression!");
-                console.log('result error', result);
-              }
-            })
+      title: "Êtes-vous sûr de vouloir supprimer la classe " + course.label + "?",
+      text: "Vous ne pourrez pas restaurer cette classe !",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Oui, supprimer la classe!",
+      cancelButtonText: "Annuler",
+      closeOnConfirm: false,
+      closeOnCancel: false
+    },
+    function(isConfirm){
+      if(isConfirm){
+        var courseDeleteRequest = CourseService.api('course/' + course.idCourse).remove();
+        courseDeleteRequest.$promise.then(function(result){
+          if(result.success){
+            var index = $scope.rowCourses.indexOf(course);
+            if(index !== -1){
+              $scope.rowCourses.splice(index, 1);
+            }
+            SweetAlert.swal("Classe supprimée !", "", "success");
           }
-           else
+          else
           {
-              SweetAlert.swal("Classe conservée!");
+            SweetAlert.swal("Erreur lors de la suppression!");
+            console.log('result error', result);
           }
-      });
-    }
+        })
+      }
+      else
+      {
+        SweetAlert.swal("Classe conservée!");
+      }
+    });
+  }
 
   $scope.download = function(document){
 
     var documentRequest = DocumentService.download('document/' + document.idDocument  );
     documentRequest.then(function(result){
       if(result.status){
-         var blob = new Blob([result.data], { type: 'application/octet-stream' });
-         FileSaver.saveAs(blob, document.originalName);
+        var blob = new Blob([result.data], { type: 'application/octet-stream' });
+        FileSaver.saveAs(blob, document.originalName);
       }else{
         //ERROR
 
-    console.log('document', document);
-    var documentRequest = DocumentService.api('document/' + document.idDocument ).get();
-    documentRequest.$promise.then(function(result){
-      console.log('TATA : ' ,result.data);
-      if(result.success){
+        console.log('document', document);
+        var documentRequest = DocumentService.api('document/' + document.idDocument ).get();
+        documentRequest.$promise.then(function(result){
+          console.log('TATA : ' ,result.data);
+          if(result.success){
 
 
           }
