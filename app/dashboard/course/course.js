@@ -2,6 +2,7 @@
 
 angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
 .controller('CourseCtrl', ['$scope', '$state', '$stateParams',  '$window', '$filter', 'UserService', 'CourseService', 'DocumentService', 'SweetAlert', 'FileSaver', function($scope, $state, $stateParams, $window, $filter, UserService, CourseService, DocumentService, SweetAlert, FileSaver) {
+
   $scope.courseId = $stateParams.id;
   $scope.itemsByPage=7;
 
@@ -14,7 +15,7 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
       $scope.userName = user.firstName;
   }
 
-  if ($scope.courseId){
+  if ($scope.courseId) {
     // GET documents
     $scope.displayedDocuments = [];
     var documentsRequest = DocumentService.get('documents/' + $scope.courseId );
@@ -217,4 +218,5 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
   $scope.goToCourseDetail = function(course) {
     $state.go("course", { id: course.idCourse });
   };
+
 }]);

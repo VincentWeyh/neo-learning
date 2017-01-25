@@ -20,7 +20,6 @@ angular.module('NeoLearning', [
   'NeoLearning.navigation',
   'btford.socket-io',
   'ngFileSaver'
-
 ]).
 config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourceProvider', function($locationProvider, $stateProvider, $urlRouterProvider, $resourceProvider) {
 
