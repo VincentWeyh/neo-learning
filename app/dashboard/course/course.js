@@ -119,6 +119,7 @@ angular.module('NeoLearning.course', ['ngFileSaver'])
   }
 
   $scope.download = function(document){
+
     var documentRequest = DocumentService.download('document/' + document.idDocument  );
     documentRequest.then(function(result){
       if(result.status){
@@ -126,8 +127,17 @@ angular.module('NeoLearning.course', ['ngFileSaver'])
          FileSaver.saveAs(blob, document.originalName);
       }else{
         //ERROR
+
+    console.log('document', document);
+    var documentRequest = DocumentService.api('document/' + document.idDocument ).get();
+    documentRequest.$promise.then(function(result){
+      console.log('TATA : ' ,result.data);
+      if(result.success){
+
+
+          }
+        })
       }
     })
   }
-
 }]);
