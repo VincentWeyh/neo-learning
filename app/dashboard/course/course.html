@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-              Classe {{courseId}}
+              Classe {{course.label}}
             </h1>
             <ol class="breadcrumb"  >
                 <li class="active" >
@@ -11,4 +11,33 @@
             </ol>
         </div>
     </div>
+
+    <table st-table="registeredStudents" class="table table-striped" st-safe-src="rowRegisteredStudents" >
+      <thead>
+        <tr>
+          <th st-sort="lastName">Nom</th>
+          <th st-sort="firstName">Prenom</th>
+          <th st-sort="email">Email</th>
+          <!-- <th>Détail</th> -->
+        </tr>
+        <tr>
+          <th colspan="5"><input st-search="" class="form-control" placeholder="Rechercher un élève ..." type="text"/></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="selectable-row" st-select-row="student" ng-click="addStudent(student)" st-select-mode="multiple" ng-repeat="student in registeredStudents">
+          <td>{{student.lastName}}</td>
+          <td>{{student.firstName}}</td>
+          <td>{{student.email}}</td>
+          <!-- <td>{{}}</td> -->
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5" class="text-center">
+            <div st-pagination="" st-items-by-page="5" st-displayed-pages="3"></div>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
 </div>

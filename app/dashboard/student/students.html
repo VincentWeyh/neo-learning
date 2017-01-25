@@ -116,7 +116,7 @@
           <div class="form-group">
             <label for="userBirthdate">Date de naissance:</label>
             <p class="input-group">
-              <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" clear-text="Effacer" current-text="Aujourd'hui" close-text="Fermer" alt-input-formats="altInputFormats" />
+              <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="userBirthdate" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" clear-text="Effacer" current-text="Aujourd'hui" close-text="Fermer" alt-input-formats="altInputFormats" />
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
               </span>
@@ -184,7 +184,7 @@
           <div class="form-group">
             <label for="userBirthdate">Date de naissance:</label>
             <p class="input-group">
-              <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="selectedEditableUser.birthdate" is-open="popup1.opened" datepicker-options="dateOptions" clear-text="Effacer" current-text="Aujourd'hui" close-text="Fermer" alt-input-formats="altInputFormats" />
+              <input type="text" class="form-control" id="selectedUserBirthdate" uib-datepicker-popup="{{format}}" ng-model="selectedUserBirthdate" is-open="popup1.opened" datepicker-options="dateOptions" clear-text="Effacer" current-text="Aujourd'hui" close-text="Fermer" alt-input-formats="altInputFormats" />
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
               </span>

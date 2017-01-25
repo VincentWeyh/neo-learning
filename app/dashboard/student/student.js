@@ -82,10 +82,17 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
                 phone: $scope.userPhone, address: $scope.userAddress, idRole: $scope.userIdRole.idRole,
                 birthdate: $scope.userBirthdate
                }
+    console.log('user',user);
 
     Object.keys(user).forEach(function(key){
       if(!user[key]) {
+        console.log('key', key);
         delete user[key];
+      }else{
+        if(key == "birthdate"){
+          console.log('birthdate');
+          new Date(user[key]);
+        }
       }
     })
 
@@ -93,14 +100,13 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
     userAddRequest.$promise.then(function(result){
       if(result.success){
         $('#newModalUser').modal('hide');
-        console.log('result', result);
-        console.log('addedUser', user);
+        user.idUser = result.data;
         $scope.displayedUsers.push(user);
         $scope.rowUsers.push(user);
         SweetAlert.swal("L'utilisateur " + user.firstName + " " + user.lastName + " à été ajouté avec succès !", "", "success");
       }else{
         $('#newModalUser').modal('hide');
-        SweetAlert.swal("Une erreur est survenue (" + result.error + ")", "", "error");
+        SweetAlert.swal("Une erreur est survenue (" + result.message + ")", "", "error");
       }
       $('#newModalUser').modal('hide');
     })
@@ -120,8 +126,10 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
     $scope.userBirthdate = null;
     $scope.registeredStudentCount = null;
     $scope.addedStudentsTxt = null;
+    selectedEditableUser.birthdate= selectedEditableUser.birthdate.substring(0,10);
     $scope.selectedEditableUser = selectedEditableUser;
     $scope.editableRole = selectedEditableUser.idRole;
+    $('#selectedUserBirthdate').val(selectedEditableUser.birthdate);
     setTimeout(function(){$('#editUserRole').val($scope.selectedEditableUser.idRole);}, 1);
     $('#editModalUser').modal('show');
   }
@@ -138,8 +146,6 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
 
     Object.keys(user).forEach(function(key){
       if(!user[key]) {
-        console.log('key', key);
-        console.log('user key', user[key]);
         delete user[key];
       }
     })
@@ -157,6 +163,7 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
 
   $scope.openNewModalUser = function(){
     $scope.userIdRole = null;
+    $scope.userFirstName = null;
     $scope.userLastName = null;
     $scope.courseDescription = null;
     $scope.userEmail = null;
@@ -185,6 +192,7 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
       },
       function(isConfirm){
           if(isConfirm){
+            console.log('user', user.idUser);
             var userDeleteRequest = CourseService.api('user/' + user.idUser).remove();
             userDeleteRequest.$promise.then(function(result){
               if(result.success){

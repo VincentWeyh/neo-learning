@@ -16,6 +16,7 @@ angular.module('NeoLearning', [
   'NeoLearning.student',
   'NeoLearning.document',
   'NeoLearning.course',
+  'NeoLearning.courses',
   'NeoLearning.navigation'
 ]).
 config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourceProvider', function($locationProvider, $stateProvider, $urlRouterProvider, $resourceProvider) {
@@ -71,7 +72,7 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
   $stateProvider.state('courses', {
     url: '/dasboard/courses',
     views : {
-      'container': { templateUrl: 'dashboard/course/courses.html', controller: 'CourseCtrl'},
+      'container': { templateUrl: 'dashboard/course/courses.html', controller: 'CoursesCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
     },
     authenticate: true,
