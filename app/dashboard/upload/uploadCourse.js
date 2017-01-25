@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('NeoLearning.uploadCourse', [])
-      .controller('UploadCourseCtrl', ['$scope', '$stateParams', '$window', 'FileUploader', 'UserService', 'UserCourseService', function($scope, $stateParams, $window, FileUploader, UserService, UserCourseService) {
+      .controller('UploadCourseCtrl', ['$scope', '$stateParams', '$window', 'FileUploader', 'UserService', 'UserCourseService', '$rootScope', function($scope, $stateParams, $window, FileUploader, UserService, UserCourseService, $rootScope) {
 
         // COURSE ID (URL)
         var courseId = $stateParams.id;
@@ -28,7 +28,7 @@ angular.module('NeoLearning.uploadCourse', [])
             console.log('result.data',result.data);
 
             uploader = $scope.uploader = new FileUploader({
-                url: 'http://localhost:7029/document',
+                url: $rootScope.url+'\:7029/document',
                 formData: [{
                   idUserCourse: result.data[0].idUserCourse,
                   idCourse: courseId,
