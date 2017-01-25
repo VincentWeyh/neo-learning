@@ -7,7 +7,7 @@
             </h1>
             <ol class="breadcrumb" >
                 <li class="active" >
-                  <button type="button" data-toggle="modal" data-target="#addCourseModal" class="btn btn-sm btn-success">
+                  <button type="button" data-toggle="modal" data-target="#addDocumentModal" class="btn btn-sm btn-success">
                     <i class="glyphicon glyphicon-remove-circle">
                     </i>
                     Ajouter fichiers
@@ -20,7 +20,7 @@
 
 
     <!-- Modal -->
-    <div class="modal fade" id="addCourseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade" id="addDocumentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -29,7 +29,7 @@
           </div>
           <div class="modal-body">
 
-                <div ng-controller="UploadCtrl" nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter">
+                <div ng-controller="UploadCourseCtrl" nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter">
 
 
 

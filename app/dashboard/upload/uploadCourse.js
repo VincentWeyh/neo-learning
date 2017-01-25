@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('NeoLearning.upload', [])
-      .controller('UploadCtrl', ['$scope', '$stateParams', '$window', 'FileUploader', 'UserService', 'UserCourseService', 'DocumentService', function($scope, $stateParams, $window, FileUploader, UserService, UserCourseService, DocumentService) {
+      .controller('UploadCourseCtrl', ['$scope', '$stateParams', '$window', 'FileUploader', 'UserService', 'UserCourseService', function($scope, $stateParams, $window, FileUploader, UserService, UserCourseService) {
 
         // COURSE ID (URL)
         var courseId = $stateParams.id;
@@ -95,22 +95,7 @@ angular.module('NeoLearning.upload', [])
           }
         })
 
-        // GET USER INFO
-        var user = UserService.getUser($window.sessionStorage.token);
-
-        // GET documents
-         $scope.displayedDocuments = [];
-         var documentsRequest = DocumentService.get('documents/user/' + user.idUser );
-         documentsRequest.then(function(result){
-           if(result.status){
-             console.log('result.data',result.data);
-             $scope.displayedDocuments = result.data.data;
-             $scope.rowDocuments = result.data.data;
-             // fillStudentsTable(result.data);
-           }else{
-             //ERROR
-           }
-         })
+        // console.log('$stateParams --->',$stateParams);
 
 
 

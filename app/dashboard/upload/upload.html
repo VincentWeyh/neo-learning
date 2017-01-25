@@ -81,7 +81,38 @@
                 </div>
 
             </div>
-
+            <div class="panel-body">
+              <table st-table="displayedDocuments" class="table table-striped" st-safe-src="rowDocuments">
+                <thead>
+                  <tr>
+                    <th st-sort="lastName">Nom fichier</th>
+                    <th st-sort="createdAt">Description</th>
+                    <th st-sort="createdAt">Date création</th>
+                    <th st-sort="studentNb">Upload par </th>
+                    <th width="25px"></th>
+                    <th width="25px"></th>
+                  </tr>
+                  <tr>
+                    <th colspan="7"><input st-search="" class="form-control" placeholder="Rechercher un document ..." type="text"/></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="selectable-row"  ng-repeat="document in displayedDocuments">
+                    <td>{{document.originalName}}</td>
+                    <td>{{document.description}}</td>
+                    <td>{{document.createdAt}}</td>
+                    <td>{{document.idUser}}</td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      <a download="file.txt" ng-click="download(document)" class="btn btn-sm btn-info">
+                        <i class="glyphicon glyphicon-download-alt"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
         </div>
 
     </div>

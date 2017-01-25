@@ -49,6 +49,15 @@ module.exports = {
       cb(err);
     });
   },
+  getDocumentbyUser: function(criteria, cb) {
+    db('Document').select('*').leftJoin('UserCourse','Document.idUserCourse', '=', 'UserCourse.idUserCourse').where('UserCourse.idUser', '=' , criteria ).then(function(documents) {
+      cb(null, documents);
+    }).catch(function(err) {
+      console.log('DOCUMENTS ERR : ', err);
+
+      cb(err);
+    });
+  },
 
   downloadDocument: function(criteria, cb) {
     db('Document').select('*').where({idDocument: criteria }).then(function(document) {
