@@ -79,6 +79,7 @@ angular.module('NeoLearning.uploadCourse', [])
                 console.info('onCancelItem', fileItem, response, status, headers);
             };
             uploader.onCompleteItem = function(fileItem, response, status, headers) {
+                // on refresh document du $scope Course.js
                 $rootScope.resfreshDocument();
 
             };
