@@ -8,6 +8,16 @@ module.exports = {
     }).catch(function(err) {
       cb(err);
     });
+  },
+
+  listUserCourses: function(criteria, cb) {
+    console.log('criteria A MERE', criteria)
+    db('UserCourse').select('*').where({'idUser':criteria.idUser}).then(function(userCourses) {
+
+      cb(null, userCourses);
+    }).catch(function(err) {
+      cb(err);
+    });
   }
 
 }

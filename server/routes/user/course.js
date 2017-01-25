@@ -4,11 +4,13 @@ module.exports = function(router, DB) {
       if(err) {
         res.json({
            success: false,
-           message: 'User does not exist'
+           message: 'User does not exist',
+           params: req.params.id
          });
          return next();
        }
       DB.userCourse.listUserCourses({idUser: req.params.id}, function(err, userCourses) {
+
         if(err) {
           res.json({
              success: false,

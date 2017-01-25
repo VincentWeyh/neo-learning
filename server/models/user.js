@@ -18,12 +18,12 @@ module.exports = {
     });
   },
   getUserById: function(criteria, cb) {
+
     db('User').select('*').where({idUser: criteria}).then(function(user) {
-      if(!user || !user.length) {
-        return cb('No user found');
-      }
+      
       cb(null, user[0]);
     }).catch(function(err) {
+      console.log('USERBYID ERR : ', err);
       cb(err);
     });
   },
