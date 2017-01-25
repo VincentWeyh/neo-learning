@@ -102,7 +102,11 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
       delete: {method: 'DELETE'}
     };
 }])
-.run(function ($rootScope, $state, UserService) {
+.run(function ($rootScope, $state, UserService ) {
+  $rootScope.url = 'http://localhost';
+  //$rootScope.url = 'http://192.168.85.1';
+  //$rootScope.url ='http://34.248.83.191';
+  
   $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
     console.log("route changed", UserService.isAuth());
     if (toState.authenticate && !UserService.isAuth()){

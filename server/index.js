@@ -11,6 +11,12 @@ var express = require('express'),
   http = require('http'),
   path = require('path');
 
+global.url = 'http://localhost';
+//global.url = 'http://192.168.85.1';
+//global.url ='http://34.248.83.191';
+global.dbUrl = '127.0.0.1';
+//global.dbUrl = 'db';
+
 var authController = require('./auth');
 
 

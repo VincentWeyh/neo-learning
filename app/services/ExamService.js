@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module("NeoLearning")
-.factory('ExamService', ['$resource', function ($resource) {
+.factory('ExamService', ['$resource' ,'$rootScope', function ($resource, $rootScope) {
         return {
           users: null,
 
           api: function(url){
-            return $resource('http://localhost\:7029/' + url, {}, {
+            return $resource($rootScope.url+'\:7029/' + url, {}, {
                   post: { method: "POST"},
                   get: { method: "GET"},
                   remove: { method: "DELETE"},

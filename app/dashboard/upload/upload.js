@@ -2,9 +2,9 @@
 
 angular.module('NeoLearning.upload', [])
 
-      .controller('UploadCtrl', ['$scope', 'FileUploader', function($scope, FileUploader) {
+      .controller('UploadCtrl', ['$scope', 'FileUploader', '$rootScope', function($scope, FileUploader, $rootScope) {
         var uploader = $scope.uploader = new FileUploader({
-            url: 'http://localhost:7029/document',
+            url: $rootScope.url+':7029/document',
             formData: [{
               idUserCourse: 1111,
               idCourse: 1111,
