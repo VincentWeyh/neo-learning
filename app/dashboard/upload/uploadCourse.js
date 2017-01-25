@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('NeoLearning.uploadCourse', [])
-      .controller('UploadCourseCtrl', ['$scope', '$stateParams', '$window', 'FileUploader', 'UserService', 'UserCourseService', '$rootScope', function($scope, $stateParams, $window, FileUploader, UserService, UserCourseService, $rootScope) {
+      .controller('UploadCourseCtrl', ['$scope', '$stateParams', '$window', 'FileUploader', 'UserService', 'UserCourseService', 'DocumentService', '$rootScope', function($scope, $stateParams, $window, FileUploader, UserService, UserCourseService, DocumentService, $rootScope) {
 
         // COURSE ID (URL)
         var courseId = $stateParams.id;
@@ -17,24 +17,14 @@ angular.module('NeoLearning.uploadCourse', [])
             var userID = user.idUser;
 
         }
+
         // on recupere le idUserCourse
         var userCourseRequest = UserCourseService.api('userCourse/'+ userID + '/' + courseId).get()
         .$promise.then(function(result){
           console.log('ALLO : ', result);
           if(result.success){
-            // uploader.onBeforeUploadItem(function(item) {
-            //   console.log('COURSE ID : ', courseId);
-            //   item.formData = [{
-            //     idUserCourse: result.data[0].idUserCourse,
-            //     idCourse: courseId,
-            //     description: 'desc'
-            //   }];
-            // });
 
             console.log('result.data',result.data);
-
-
-
             // FILTERS
             // a sync filter
             uploader.filters.push({
@@ -60,6 +50,7 @@ angular.module('NeoLearning.uploadCourse', [])
             };
             uploader.onAfterAddingFile = function(fileItem) {
                 console.info('onAfterAddingFile', fileItem);
+
             };
             uploader.onAfterAddingAll = function(addedFileItems) {
                 console.info('onAfterAddingAll', addedFileItems);
@@ -88,7 +79,20 @@ angular.module('NeoLearning.uploadCourse', [])
                 console.info('onCancelItem', fileItem, response, status, headers);
             };
             uploader.onCompleteItem = function(fileItem, response, status, headers) {
-                console.info('onCompleteItem', fileItem, response, status, headers);
+                //console.info('onCompleteItem', fileItem, response, status, headers);
+                console.log('----scope.displayedDocuments uploadCtrl----',$scope.displayedDocuments);
+                var documentsRequest = DocumentService.get('documents/' + courseId );
+                documentsRequest.then(function(result){
+                  if(result.status){
+
+                    $scope.displayedDocuments = result.data.data;
+                    $scope.rowDocuments = result.data.data;
+                    // fillStudentsTable(result.data);
+                  }else{
+                    //ERROR
+                  }
+                })
+                //console.log('after $scope', $scope.displayedDocuments);
             };
             uploader.onCompleteAll = function() {
                 console.info('onCompleteAll');
