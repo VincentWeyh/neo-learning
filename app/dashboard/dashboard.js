@@ -37,14 +37,21 @@ angular.module('NeoLearning.dashboard', [])
   // })
 
   // GET USER COURSES
-  console.log('idUser',user.idUser);
+  console.log('idUser',user);
   var userCourseRequest = CourseService.api('user/' + user.idUser + '/course').get();
 
   userCourseRequest.$promise.then(function(result){
     if(result.success){
       console.log('result mes cours ', result);
-      $scope.displayedCourses = result.data.studentCourses;
-      $scope.rowCourses = result.data.studentCourses;
+      // si user = teacher
+      if (user.idRole == 1111 ){
+        $scope.displayedCourses = result.data.teacherCourses;
+        $scope.rowCourses = result.data.teacherCourses;
+      }else{
+        $scope.displayedCourses = result.data.studentCourses;
+        $scope.rowCourses = result.data.studentCourses;
+      }
+
     }
     else{
       // ERROR
