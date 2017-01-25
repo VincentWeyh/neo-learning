@@ -6,10 +6,11 @@ angular.module('NeoLearning', [
   'ngResource',
   'LocalStorageModule',
   'ui.router',
+  'ngMaterial',
   'smart-table',
   'angularFileUpload',
+  'ui.bootstrap',
   'NeoLearning.signin',
-  
   'NeoLearning.uploadCourse',
   'NeoLearning.dashboard',
   'NeoLearning.student',
@@ -19,6 +20,7 @@ angular.module('NeoLearning', [
   'NeoLearning.navigation',
   'btford.socket-io',
   'ngFileSaver'
+
 ]).
 config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourceProvider', function($locationProvider, $stateProvider, $urlRouterProvider, $resourceProvider) {
 

@@ -78,7 +78,11 @@ router.delete('/user/:id', function(req, res, next) {
 });
 
 router.put('/user/:id', function(req, res, next) {
+  console.log('req id', req.params.id);
+  console.log('req body ', req.body);
+
   DB.user.updateUser(req.params.id, req.body, function(err) {
+    console.log('err', err);
     if(err) {
       res.json({
          success: false,
