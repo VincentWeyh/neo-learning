@@ -123,38 +123,38 @@
                 <div class="panel-heading">
                     <h3 class="panel-title"><i class="fa fa-graduation-cap" aria-hidden="true"></i></i> Les classes</h3>
                 </div>
-                <div class="panel-body">
-                    <div>
-                      <table st-table="displayedCourses" class="table table-striped" st-safe-src="rowCourses">
-                        <thead>
-                          <tr>
-                            <th st-sort="lastName">Classe</th>
-                            <th st-sort="createdAt">Description</th>
-                            <th st-sort="createdAt">Date création</th>
-                            <th st-sort="createdAt">Date modification</th>
-                            <th st-sort="studentNb">Nb d'élèves</th>
-                            <th st-sort="examNb">Nb d'examens</th>
-                          </tr>
-                          <tr>
-                            <th colspan="9"><input st-search="" class="form-control" placeholder="Rechercher une classe ..." type="text"/></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr class="selectable-row" ng-click="goToCourseDetail(course)" ng-if="course.enabled == true" ng-repeat="course in displayedCourses">
-                            <td>{{course.label}}</td>
-                            <td>{{course.description}}</td>
-                            <td>{{course.createdAt}}</td>
-                            <td>{{course.updatedAt}}</td>
-                            <td></td>
-                            <td></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+                  <div>
+                    <table st-table="displayedCourses" class="table table-striped" st-safe-src="rowCourses">
+                      <thead>
+                        <tr>
+                          <th st-sort="lastName">Classe</th>
+                          <th st-sort="createdAt">Description</th>
+                          <th st-sort="createdAt">Date création</th>
+                          <th st-sort="createdAt">Date modification</th>
+                          <th st-sort="studentNb">Nb d'élèves</th>
+                          <th st-sort="examNb">Nb d'examens</th>
+                        </tr>
+                        <tr>
+                          <th colspan="9"><input st-search="" class="form-control" placeholder="Rechercher une classe ..." type="text"/></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="selectable-row" ng-click="goToCourseDetail(course)" ng-if="course.enabled == true" ng-repeat="course in displayedCourses">
+                          <td>{{course.label}}</td>
+                          <td>{{course.description}}</td>
+                          <td>{{course.createdAt}}</td>
+                          <td>{{course.updatedAt}}</td>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="panel-body">
                     <div class="text-right">
                         <a ui-sref="courses"> Voir toutes les classes <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
-                </div>
+                  </div>
             </div>
         </div>
     </div>
@@ -166,34 +166,34 @@
               <div class="panel-heading">
                   <h3 class="panel-title"><i class="fa fa-graduation-cap"></i> Eleves</h3>
               </div>
-              <div class="panel-body">
-                  <div>
-                    <table st-table="displayedStudents" class="table table-striped" st-safe-src="rowStudents" >
-                      <thead>
-                        <tr>
-                          <th st-sort="lastName">Nom</th>
-                          <th st-sort="firstName">Prenom</th>
-                          <th st-sort="email">Email</th>
-                          <!-- <th>Détail</th> -->
-                        </tr>
-                        <tr>
-                          <th colspan="5"><input st-search="" class="form-control" placeholder="Rechercher un élève ..." type="text"/></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr class="selectable-row" ng-click="goToStudentDetail(student)" ng-repeat="student in displayedStudents">
-                          <td>{{student.firstName}}</td>
-                          <td>{{student.lastName}}</td>
-                          <td>{{student.email}}</td>
-                          <!-- <td>{{}}</td> -->
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+                <div>
+                  <table st-table="displayedStudents" class="table table-striped" st-safe-src="rowStudents" >
+                    <thead>
+                      <tr>
+                        <th st-sort="lastName">Nom</th>
+                        <th st-sort="firstName">Prenom</th>
+                        <th st-sort="email">Email</th>
+                        <!-- <th>Détail</th> -->
+                      </tr>
+                      <tr>
+                        <th colspan="5"><input st-search="" class="form-control" placeholder="Rechercher un élève ..." type="text"/></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="selectable-row" ng-click="goToStudentDetail(student)" ng-repeat="student in displayedStudents">
+                        <td>{{student.firstName}}</td>
+                        <td>{{student.lastName}}</td>
+                        <td>{{student.email}}</td>
+                        <!-- <td>{{}}</td> -->
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="panel-body">
                   <div class="text-right">
                       <a ui-sref="students"> Voir tous les élèves <i class="fa fa-arrow-circle-right"></i></a>
                   </div>
-              </div>
+                </div>
           </div>
         </div>
         <div class="col-lg-6">
@@ -201,7 +201,6 @@
               <div class="panel-heading">
                   <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Examens </h3>
               </div>
-              <div class="panel-body">
                   <div>
                     <table st-table="students" class="table table-striped">
                       <!-- <thead>
@@ -220,10 +219,11 @@
                       </tbody> -->
                     </table>
                   </div>
-                  <div class="text-right">
-                      <a href="#/dashboard"> Voir toutes les Examens <i class="fa fa-arrow-circle-right"></i></a>
+                  <div class="panel-body">
+                    <div class="text-right">
+                        <a href="#/dashboard"> Voir toutes les Examens <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
                   </div>
-              </div>
           </div>
         </div>
     </div>

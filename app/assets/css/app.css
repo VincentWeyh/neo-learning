@@ -22,10 +22,12 @@ LIGTH BLUE : #1C2B36
 
 body{
   font: 14px/16px "Roboto", sans-serif !important;
+  background-color: transparent !important;
 }
 
 #wrapper{
   padding-left: 195px !important;
+  background-color: #FFF;
 }
 
 .help-block{

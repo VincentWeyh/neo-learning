@@ -22,6 +22,17 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
     }
   })
 
+  $scope.format = 'd!/M!/yyyy';
+  $scope.altInputFormats = ['M!/d!/yyyy'];
+
+  $scope.popup1 = {
+    opened: false
+  };
+
+  $scope.open1 = function() {
+    $scope.popup1.opened = true;
+  };
+
   $scope.displayedUsers = [];
   var usersRequest = UserService.api('user').get();
   usersRequest.$promise.then(function(result){
@@ -45,6 +56,16 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
     }
     $scope.addUser();
   }
+
+  // $scope.checkEditFormInput = function(){
+  //   $scope.submitted = true;
+  //   if (!$('#editUserRole').val()){
+  //     $scope.invalidRole = true;
+  //     $('#roleListInput').addClass('has-error');
+  //     return;
+  //   }
+  //   $scope.editUser();
+  // }
 
   $scope.checkRoleValue = function(){
     if(!!$scope.userIdRole){
@@ -100,22 +121,52 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
     $scope.registeredStudentCount = null;
     $scope.addedStudentsTxt = null;
     $scope.selectedEditableUser = selectedEditableUser;
-    console.log('selectedUser', $scope.selectedEditableUser);
+    $scope.editableRole = selectedEditableUser.idRole;
+    setTimeout(function(){$('#editUserRole').val($scope.selectedEditableUser.idRole);}, 1);
     $('#editModalUser').modal('show');
   }
 
-  $scope.editCourse = function(){
-    var courseEditRequest = CourseService.api('course/' + $scope.selectedEditableCourse.idCourse ).update({label: $scope.selectedEditableCourse.label, description: $scope.selectedEditableCourse.description});
-    courseEditRequest.$promise.then(function(result){
+  $scope.editUser = function(){
+    console.log("editedPassword", $scope.editedPassword);
+
+    var user = {
+                firstName: $scope.selectedEditableUser.firstName, lastName: $scope.selectedEditableUser.lastName,
+                password: $scope.editedPassword, city: $scope.selectedEditableUser.city,
+                phone: $scope.selectedEditableUser.phone, address: $scope.selectedEditableUser.address, idRole: $('#editUserRole').val(),
+                birthdate: $scope.selectedEditableUser.birthdate
+               }
+
+    Object.keys(user).forEach(function(key){
+      if(!user[key]) {
+        console.log('key', key);
+        console.log('user key', user[key]);
+        delete user[key];
+      }
+    })
+
+    console.log('user',user);
+    UserService.api('user/' + $scope.selectedEditableUser.idUser ).update(user).
+    $promise.then(function(result){
+      console.log('result', result);
        if(result.success){
-         SweetAlert.swal("Classe éditée avec succès !", "", "success");
+         SweetAlert.swal("Utilisateur édité avec succès !", "", "success");
        }
-      $('#editModalCourse').modal('hide');
+      $('#editModalUser').modal('hide');
     })
   }
 
   $scope.openNewModalUser = function(){
-    console.log('openNewModalUser');
+    $scope.userIdRole = null;
+    $scope.userLastName = null;
+    $scope.courseDescription = null;
+    $scope.userEmail = null;
+    $scope.userPassword = null;
+    $scope.userCity = null;
+    $scope.userPhone = null;
+    $scope.userAddress = null;
+    $scope.userBirthdate = null;
+    $scope.registeredStudentCount = null;
+    $scope.addedStudentsTxt = null;
     $(".selectable-row").removeClass("st-selected");
     $('#newModalUser').modal('show');
   }
