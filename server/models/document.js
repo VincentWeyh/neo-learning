@@ -1,4 +1,6 @@
 var db = require('../db.js');
+var Client = require('ftp');
+var fs = require('fs');
 
 
 module.exports = {
@@ -30,8 +32,10 @@ module.exports = {
     });
   },
   listDocumentsByCourse: function(criteria, cb) {
-    db('Document').select('*').leftJoin('UserCourse', 'Document.idUserCourse', '=', 'UserCourse.idUserCourse').where('UserCourse.idCourse', '=', criteria).then(function(documents) {
-      console.log('DOCUMENTS : ', documents);
+    db('Document').select('*').leftJoin('UserCourse', 'Document.idUserCourse', '=', 'UserCourse.idUserCourse')
+    // .leftJoin('User', 'UserCourse.idUser', '=', 'UserCourse.idUser')
+                  .where('UserCourse.idCourse', '=', criteria)
+    .then(function(documents) {
       cb(null, documents);
     }).catch(function(err) {
       console.log('DOCUMENTS ERR : ', err);
@@ -39,4 +43,54 @@ module.exports = {
       cb(err);
     });
   },
+  getDocument: function(criteria, cb) {
+    db('Document').select('*').where({idDocument: criteria }).then(function(documents) {
+      cb(null, documents);
+    }).catch(function(err) {
+      console.log('DOCUMENTS ERR : ', err);
+
+      cb(err);
+    });
+  },
+  getDocumentbyUser: function(criteria, cb) {
+    db('Document').select('*')
+                  .leftJoin('UserCourse','Document.idUserCourse', '=', 'UserCourse.idUserCourse')
+                  .where('UserCourse.idUser', '=' , criteria )
+                  .then(function(documents) {
+      cb(null, documents);
+    }).catch(function(err) {
+      console.log('DOCUMENTS ERR : ', err);
+
+      cb(err);
+    });
+  },
+
+  downloadDocument: function(criteria, cb) {
+    db('Document').select('*').where({idDocument: criteria }).then(function(document) {
+      console.log('document', document[0] );
+      var c = new Client();
+      c.on('ready', function() {
+        console.log('RADY', document[0].url  ,  document[0].fileName );
+        c.get(document[0].url + document[0].fileName, function(err, file) {
+          if (err) console.log('err' , err);
+          file.once('close', function () {
+            c.end();
+          });
+          cb(null, file);
+        });
+      });
+      console.log('CONNECT');
+      c.connect({
+        host: '192.168.1.85',
+        port: 21,
+        user: 'test',
+        password: 'test',
+        secure: true,
+        secureOptions: {rejectUnauthorized:false}
+      });
+    }).catch(function(err) {
+      console.log('DOCUMENTS ERR : ', err);
+      cb(err);
+    });
+  }
 }

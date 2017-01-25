@@ -11,13 +11,17 @@ angular.module('NeoLearning', [
   'angularFileUpload',
   'ui.bootstrap',
   'NeoLearning.signin',
-  'NeoLearning.upload',
+  'NeoLearning.uploadCourse',
   'NeoLearning.dashboard',
   'NeoLearning.student',
   'NeoLearning.document',
   'NeoLearning.course',
   'NeoLearning.courses',
-  'NeoLearning.navigation'
+  'NeoLearning.navigation',
+  'NeoLearning.chat',
+  'NeoLearning.navigation',
+  'btford.socket-io',
+  'ngFileSaver'
 ]).
 config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourceProvider', function($locationProvider, $stateProvider, $urlRouterProvider, $resourceProvider) {
 
@@ -43,7 +47,7 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
     authenticate: true,
   })
   $stateProvider.state('upload', {
-    url: '/dasboard/upload',
+    url: '/dashboard/upload',
     views : {
       'container': { templateUrl: 'dashboard/upload/upload.html', controller: 'UploadCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
@@ -51,7 +55,7 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
     authenticate: true,
   })
   $stateProvider.state('students', {
-    url: '/dasboard/students',
+    url: '/dashboard/students',
     views : {
       'container': { templateUrl: 'dashboard/student/students.html', controller: 'StudentCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
@@ -59,7 +63,7 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
     authenticate: true,
   })
   $stateProvider.state('student', {
-    url: '/dasboard/student?id',
+    url: '/dashboard/student?id',
     views : {
       'container': { templateUrl: 'dashboard/student/student.html', controller: 'StudentCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
@@ -70,24 +74,38 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
     authenticate: true,
   })
   $stateProvider.state('courses', {
-    url: '/dasboard/courses',
+    url: '/dashboard/courses',
     views : {
       'container': { templateUrl: 'dashboard/course/courses.html', controller: 'CoursesCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
     },
     authenticate: true,
   })
+  $stateProvider.state('chat', {
+    url: '/dasboard/chat',
+    views : {
+      'container': { templateUrl: 'dashboard/chat/chat.html', controller: 'ChatCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
+    },
+    authenticate: true,
+  })
   $stateProvider.state('course', {
-    url: '/dasboard/course?id',
+    url: '/dashboard/course?id',
     views : {
       'container': { templateUrl: 'dashboard/course/course.html', controller: 'CourseCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
     },
-    // params: {
-    //   course: null
-    // },
     authenticate: true,
   })
+  $stateProvider.state('myDocuments', {
+    url: '/dashboard/documents',
+    views : {
+      'container': { templateUrl: 'dashboard/document/document.html', controller: 'DocumentCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
+    },
+    authenticate: true,
+  })
+
 
   $resourceProvider.defaults.actions = {
       create: {method: 'POST'},
@@ -97,7 +115,11 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
       delete: {method: 'DELETE'}
     };
 }])
-.run(function ($rootScope, $state, UserService) {
+.run(function ($rootScope, $state, UserService ) {
+  $rootScope.url = 'http://localhost';
+  //$rootScope.url = 'http://192.168.85.1';
+  //$rootScope.url ='http://34.248.83.191';
+
   $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
     console.log("route changed", UserService.isAuth());
     if (toState.authenticate && !UserService.isAuth()){

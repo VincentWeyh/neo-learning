@@ -21,7 +21,6 @@ router.get('/user', function(req, res, next) {
 });
 
 router.get('/user/:id', function(req, res, next) {
-  console.log('OIPJHZEF : ', req.params.id);
   DB.user.getUserById(req.params.id, function(err, user) {
     if(err) {
       res.json({

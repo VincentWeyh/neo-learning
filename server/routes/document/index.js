@@ -8,12 +8,14 @@ var upload = multer({ dest: './' }).any();
 
 router.post('/document', function(req, res, next) {
   upload(req, res, function (err) {
+    console.log('req.body : ', req.body);
     if (err) {
       return
     }
 
     req.files.forEach(function(file) {
       var filePath = file.destination + file.path;
+
       var c = new Client();
       c.on('ready', function() {
         c.put(filePath, 'neo-learning/' + req.body.idCourse + '/' + file.filename, function(err) {
@@ -50,7 +52,7 @@ router.post('/document', function(req, res, next) {
 
 });
 
-router.get('/document/:id', function(req, res, next) {
+router.get('/documents/:id', function(req, res, next) {
   DB.document.listDocumentsByCourse(req.params.id, function(err, documents) {
     if(err) {
       res.json({
@@ -64,6 +66,35 @@ router.get('/document/:id', function(req, res, next) {
        data: documents
      });
   });
+});
+
+router.get('/documents/user/:id', function(req, res, next) {
+  DB.document.getDocumentbyUser(req.params.id, function(err, documents) {
+    if(err) {
+      res.json({
+         success: false,
+         message: 'Failed load documents by user'
+       });
+       return next();
+    }
+    res.json({
+       success: true,
+       data: documents
+     });
+  });
+});
+
+router.get('/document/:id', function(req, res, next) {
+  DB.document.downloadDocument(req.params.id, function(err, document) {
+    if(err) {
+      res.json({
+         success: false,
+         message: 'Failed load document'
+       });
+       return next();
+    }
+      document.pipe(res);
+    });
 });
 
 module.exports = router;
