@@ -8,8 +8,13 @@ angular.module('NeoLearning.chat', ['btford.socket-io'])
 }).controller('ChatCtrl', ['$scope', '$stateParams',  '$window', '$filter', 'UserService', 'CourseService', 'socket', function($scope, $stateParams, $window, $filter, UserService, CourseService, socket) {
   $scope.courseId = $stateParams.id;
 
-
   $scope.users = [];
+
+  $scope.enter = function(keyEvent, message) {
+    if (keyEvent.which === 13) {
+      $scope.doPost(message);
+    }
+  }
 
   socket.on('connect', function () { });
 
@@ -33,12 +38,9 @@ angular.module('NeoLearning.chat', ['btford.socket-io'])
     socket.emit('adduser', data);
   });
 
-  $scope.createRoom = function (data) {
-    $scope.currentUser = data.username;
-    socket.emit('createroom', data);
-  }
-
   $scope.joinRoom = function (data) {
+    var user = UserService.getUser($window.sessionStorage.token);
+    data.username = user.firstName + '_' + user.lastName;
     $scope.currentUser = data.username;
     socket.emit('adduser', data);
   }

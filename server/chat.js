@@ -13,7 +13,16 @@ var rooms = [];
 
 io.sockets.on('connection', function (socket) {
 
+  var createRoom = function(data) {
+      console.log('CREATE ROOM');
+      var new_room = data.room;
+      rooms.push(new_room);
+      data.room = new_room;
+      socket.emit('roomcreated', data);
+  };
+
     socket.on('adduser', function (data) {
+      console.log('ADD user : ', data);
         var username = data.username;
         var room = data.room;
 
@@ -25,17 +34,19 @@ io.sockets.on('connection', function (socket) {
             socket.emit('updatechat', 'SERVER', 'You are connected. Start chatting');
             socket.broadcast.to(room).emit('updatechat', 'SERVER', username + ' has connected to this room');
         } else {
-            socket.emit('updatechat', 'SERVER', 'Please enter valid code.');
+          console.log('POUET');
+          createRoom(data);
+            // socket.emit('createroom', {room: data.room});
         }
     });
 
-    socket.on('createroom', function (data) {
-        var new_room = ("" + Math.random()).substring(2, 7);
-        rooms.push(new_room);
-        data.room = new_room;
-        socket.emit('updatechat', 'SERVER', 'Your room is ready, invite someone using this ID:' + new_room);
-        socket.emit('roomcreated', data);
-    });
+    // socket.on('createroom', function (data) {
+    //   var new_room = data.room;
+    //   rooms.push(new_room);
+    //   data.room = new_room;
+    //   socket.emit('updatechat', 'SERVER', 'Your room is ready, invite someone using this ID:' + new_room);
+    //   socket.emit('roomcreated', data);
+    // });
 
     socket.on('sendchat', function (data) {
         io.sockets.in(socket.room).emit('updatechat', socket.username, data);
