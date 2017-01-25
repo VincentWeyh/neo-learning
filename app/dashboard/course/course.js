@@ -12,19 +12,23 @@ angular.module('NeoLearning.course', ['ngFileSaver'])
   if(user){
       $scope.userName = user.firstName;
   }
-  // GET documents
-   $scope.displayedDocuments = [];
-   var documentsRequest = DocumentService.get('documents/' + $scope.courseId );
-   documentsRequest.then(function(result){
-     if(result.status){
-       console.log('result.data',result.data);
-       $scope.displayedDocuments = result.data.data;
-       $scope.rowDocuments = result.data.data;
-       // fillStudentsTable(result.data);
-     }else{
-       //ERROR
-     }
-   })
+  
+  if ($scope.courseId){
+    // GET documents
+    $scope.displayedDocuments = [];
+    var documentsRequest = DocumentService.get('documents/' + $scope.courseId );
+    documentsRequest.then(function(result){
+      if(result.status){
+        console.log('result.data',result.data);
+        $scope.displayedDocuments = result.data.data;
+        $scope.rowDocuments = result.data.data;
+        // fillStudentsTable(result.data);
+      }else{
+        //ERROR
+      }
+    })
+  }
+
    //console.log('documentsRequest: ',documentsRequest)
   // GET STUDENTS
   $scope.displayedCourses = [];
