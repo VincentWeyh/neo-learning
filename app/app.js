@@ -9,7 +9,8 @@ angular.module('NeoLearning', [
   'smart-table',
   'angularFileUpload',
   'NeoLearning.signin',
-  'NeoLearning.upload',
+  
+  'NeoLearning.uploadCourse',
   'NeoLearning.dashboard',
   'NeoLearning.student',
   'NeoLearning.document',
@@ -93,6 +94,15 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
     },
     authenticate: true,
   })
+  $stateProvider.state('myDocuments', {
+    url: '/dashboard/documents',
+    views : {
+      'container': { templateUrl: 'dashboard/document/document.html', controller: 'DocumentCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
+    },
+    authenticate: true,
+  })
+
 
   $resourceProvider.defaults.actions = {
       create: {method: 'POST'},
@@ -102,7 +112,11 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
       delete: {method: 'DELETE'}
     };
 }])
-.run(function ($rootScope, $state, UserService) {
+.run(function ($rootScope, $state, UserService ) {
+  $rootScope.url = 'http://localhost';
+  //$rootScope.url = 'http://192.168.85.1';
+  //$rootScope.url ='http://34.248.83.191';
+
   $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
     console.log("route changed", UserService.isAuth());
     if (toState.authenticate && !UserService.isAuth()){

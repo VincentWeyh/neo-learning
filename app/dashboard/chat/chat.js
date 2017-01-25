@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('NeoLearning.chat', ['btford.socket-io'])
-  .factory('socket', function (socketFactory) {
+  .factory('socket' , function (socketFactory, $rootScope) {
     return socketFactory({
-      ioSocket: io.connect('localhost:7050')
+      ioSocket: io.connect($rootScope.url+':7050')
     });
 }).controller('ChatCtrl', ['$scope', '$stateParams',  '$window', '$filter', 'UserService', 'CourseService', 'socket', function($scope, $stateParams, $window, $filter, UserService, CourseService, socket) {
   $scope.courseId = $stateParams.id;

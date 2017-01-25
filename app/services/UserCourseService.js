@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module("NeoLearning")
-.factory('ExamService', ['$resource' ,'$rootScope', function ($resource, $rootScope) {
+.factory('UserCourseService', ['$resource', '$rootScope', function ($resource, $rootScope) {
         return {
-          users: null,
+          documents: null,
 
           api: function(url){
             return $resource($rootScope.url+'\:7029/' + url, {}, {

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module("NeoLearning")
-.factory('DocumentService', ['$http', function ($http) {
+.factory('DocumentService', ['$http', '$rootScope', function ($http, $rootScope) {
         return {
           // api: function(url, data) {
             // return
@@ -9,7 +9,7 @@ angular.module("NeoLearning")
               post: function(url, data) {
                     return $http({
                       method: 'GET',
-                      url: 'http://localhost\:7029/' + url,
+                      url: $rootScope.url+'\:7029/' + url,
                       data: data
                     })
               },
@@ -17,13 +17,13 @@ angular.module("NeoLearning")
               get: function(url) {
                     return $http({
                       method: 'GET',
-                      url: 'http://localhost\:7029/' + url
+                      url: $rootScope.url+'\:7029/' + url
                     })
               },
               download: function(url) {
                     return $http({
                       method: 'GET',
-                      url: 'http://localhost\:7029/' + url,
+                      url: $rootScope.url+'\:7029/' + url,
                       responseType: 'blob'
                     })
               }

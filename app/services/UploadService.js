@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module("NeoLearning")
-.factory('ExamService', ['$resource' ,'$rootScope', function ($resource, $rootScope) {
+.factory('UploadService', ['$resource', '$rootScope',  function ($resource, $rootScope) {
         return {
           users: null,
 
