@@ -1,13 +1,12 @@
 'use strict';
 
-angular.module('NeoLearning.upload', [])
-      .controller('UploadCtrl', ['$scope', '$stateParams', '$window', 'FileUploader', 'UserService', 'UserCourseService', 'DocumentService', '$rootScope', function($scope, $stateParams, $window, FileUploader, UserService, UserCourseService, DocumentService, $rootScope) {
+angular.module('NeoLearning.uploadCourse', [])
+      .controller('UploadCourseCtrl', ['$scope', '$stateParams', '$window', 'FileUploader', 'UserService', 'UserCourseService', function($scope, $stateParams, $window, FileUploader, UserService, UserCourseService) {
 
         // COURSE ID (URL)
         var courseId = $stateParams.id;
         var uploader = $scope.uploader = new FileUploader({
           url: ''
-
         });
         // var uploader = $scope.uploader = new FileUploader({
         //     url: 'http://localhost:7029/document'
@@ -17,7 +16,7 @@ angular.module('NeoLearning.upload', [])
         var user = UserService.getUser($window.sessionStorage.token);
         if(user){
           //on recupere le userId
-uploadCourse
+
             var userID = user.idUser;
 
         }
@@ -29,7 +28,7 @@ uploadCourse
             console.log('result.data',result.data);
 
             uploader = $scope.uploader = new FileUploader({
-                url: $rootScope.url+':7029/document',
+                url: 'http://localhost:7029/document',
                 formData: [{
                   idUserCourse: result.data[0].idUserCourse,
                   idCourse: courseId,
@@ -63,7 +62,10 @@ uploadCourse
             uploader.onAfterAddingFile = function(fileItem) {
                 console.info('onAfterAddingFile', fileItem);
             };
-            uploader.onAfterAddingAll = function(addedFileItems){
+            uploader.onAfterAddingAll = function(addedFileItems) {
+                console.info('onAfterAddingAll', addedFileItems);
+            };
+            uploader.onBeforeUploadItem = function(item) {
                 console.info('onBeforeUploadItem', item);
             };
             uploader.onProgressItem = function(fileItem, progress) {
@@ -93,22 +95,7 @@ uploadCourse
           }
         })
 
-        // GET USER INFO
-        var user = UserService.getUser($window.sessionStorage.token);
-
-        // GET documents
-         $scope.displayedDocuments = [];
-         var documentsRequest = DocumentService.get('documents/user/' + user.idUser );
-         documentsRequest.then(function(result){
-           if(result.status){
-             console.log('result.data',result.data);
-             $scope.displayedDocuments = result.data.data;
-             $scope.rowDocuments = result.data.data;
-             // fillStudentsTable(result.data);
-           }else{
-             //ERROR
-           }
-         })
+        // console.log('$stateParams --->',$stateParams);
 
 
 

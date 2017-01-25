@@ -10,6 +10,7 @@ angular.module('NeoLearning', [
   'angularFileUpload',
   'NeoLearning.signin',
   'NeoLearning.upload',
+  'NeoLearning.uploadCourse',
   'NeoLearning.dashboard',
   'NeoLearning.student',
   'NeoLearning.document',
