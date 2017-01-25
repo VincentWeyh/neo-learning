@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('NeoLearning.upload', [])
+angular.module('NeoLearning.uploadCourse', [])
       .controller('UploadCourseCtrl', ['$scope', '$stateParams', '$window', 'FileUploader', 'UserService', 'UserCourseService', function($scope, $stateParams, $window, FileUploader, UserService, UserCourseService) {
 
         // COURSE ID (URL)
