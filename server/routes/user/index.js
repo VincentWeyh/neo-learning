@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var DB = require('../../models.js');
+var jwt = require('jsonwebtoken');
 
 
 
@@ -33,6 +34,27 @@ router.get('/user/:id', function(req, res, next) {
        success: true,
        data: user
      });
+  });
+});
+
+//Get token by ID
+router.get('/user/:id/token', function(req, res, next) {
+  DB.user.getUserById(req.params.id, function(err, user) {
+    if(err) {
+      res.json({
+         success: false,
+         message: 'Failed load user'
+       });
+       return next();
+    }
+    delete user.password;
+    delete user.salt;
+    delete user.iteration;
+    var token = jwt.sign(user, 'secret');
+    res.json({
+     success: true,
+     data: token
+    });
   });
 });
 
