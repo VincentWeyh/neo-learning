@@ -49,5 +49,5 @@ module.exports = {
     }).catch(function(err) {
       cb(err);
     });
-  },
+  }
 }
