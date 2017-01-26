@@ -1,11 +1,11 @@
 'use strict';
 
-angular.module('NeoLearning.chat', ['btford.socket-io'])
+angular.module('NeoLearning.board', ['btford.socket-io'])
   .factory('socket', function (socketFactory) {
     return socketFactory({
-      ioSocket: io.connect('localhost:7050')
+      ioSocket: io.connect('localhost:7051')
     });
-}).controller('ChatCtrl', ['$scope', '$stateParams',  '$window', '$filter', 'UserService', 'CourseService', 'socket', function($scope, $stateParams, $window, $filter, UserService, CourseService, socket) {
+}).controller('BoardCtrl', ['$scope', '$stateParams',  '$window', '$filter', 'UserService', 'CourseService', 'socket', function($scope, $stateParams, $window, $filter, UserService, CourseService, socket) {
 
   $scope.users = [];
   $scope.messages = {};

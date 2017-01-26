@@ -15,13 +15,19 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
     $scope.userName = user.firstName;
   }
 
+  CourseService.api('course/'+ $scope.courseId).get().$promise
+  .then(function(result){
+     if(result.success){
+       $scope.course= result.data;
+     }else{
+       //ERROR
+     }
+   })
 
   $rootScope.resfreshDocument = function(){
-
     var documentsRequest = DocumentService.get('documents/' + $scope.courseId );
     documentsRequest.then(function(result){
       if(result.status){
-        console.log('result.data refresh',result.data);
         $scope.displayedDocuments = result.data.data;
         $scope.rowDocuments = result.data.data;
         // fillStudentsTable(result.data);
@@ -29,7 +35,6 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
         //ERROR
       }
     })
-
   };
 
   $scope.displayedDocuments = [];

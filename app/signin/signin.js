@@ -8,6 +8,7 @@ angular.module('NeoLearning.signin', [])
     var user = UserService.api('auth').post({email: $scope.email, password: $scope.password });
     user.$promise.then(function(result){
       if(result.success){
+        
         $window.sessionStorage.token = result.data;
         $location.path('/dashboard');
       }else{

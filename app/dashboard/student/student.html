@@ -3,12 +3,32 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-              Eleve {{user.idUser}}
+              Eleve {{userSelected.firstName}}
             </h1>
-            <ol class="breadcrumb">
-                <li class="active">
-                </li>
-            </ol>
+
+            <div class="panel-body">
+              <table st-table="userSelectedCourse" class="table table-striped" st-safe-src="rowCourses">
+                <thead>
+                  <tr>
+                    <th st-sort="lastName">Classe</th>
+                    <th st-sort="createdAt">Description</th>
+                    <th st-sort="createdAt">Note</th>
+                    <th st-sort="createdAt">Appréciation</th>
+                  </tr>
+                  <tr>
+                    <th colspan="9"><input st-search="" class="form-control" placeholder="Rechercher une classe ..." type="text"/></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="selectable-row" ng-if="course.enabled == true" ng-repeat="course in userSelectedCourse">
+                    <td>{{course.label}}</td>
+                    <td>{{course.description}}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
         </div>
     </div>
 </div>

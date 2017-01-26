@@ -7,6 +7,8 @@ angular.module('NeoLearning.dashboard', [])
   var user = UserService.getUser($window.sessionStorage.token);
   if(user){
       $scope.userName = user.firstName;
+      $scope.user = user;
+    
   }
 
   // GET STUDENTS

@@ -8,7 +8,6 @@ var upload = multer({ dest: './' }).any();
 
 router.post('/document', function(req, res, next) {
   upload(req, res, function (err) {
-    console.log('req.body : ', req.body);
     if (err) {
       return
     }

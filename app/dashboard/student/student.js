@@ -4,9 +4,26 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
 .controller('StudentCtrl', ['$scope', '$state', '$stateParams', '$location', '$window', '$filter', 'UserService', 'CourseService', 'SweetAlert', function($scope, $state, $stateParams, $location, $window, $filter, UserService, CourseService, SweetAlert) {
   $scope.itemsByPage=7;
   $scope.validRole=false;
+  $scope.studentId = $stateParams.id;
 
-
-  console.log('studentCtrl');
+  UserService.api('user/'+ $scope.studentId).get().$promise
+  .then(function(result){
+     if(result.success){
+       $scope.userSelected= result.data;
+     }else{
+       //ERROR
+     }
+   })
+   UserService.api('user/'+ $scope.studentId +'/course').get().$promise
+   .then(function(result){
+      if(result.success){
+         console.log('resultSudent', result);
+        $scope.userSelectedCourse= result.data.studentCourses;
+        $scope.rowCourses = result.data.studentCourses;
+      }else{
+        //ERROR
+      }
+    })
 
   // GET USER INFO
   var user = UserService.getUser($window.sessionStorage.token);

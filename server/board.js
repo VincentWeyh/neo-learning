@@ -1,25 +1,24 @@
 var express = require('express');
-
-var app = express();
-app.set('port', process.env.PORT || 9000);
-var server = require('http').Server(app);
+var router = express.Router();
+var server = require('http').Server(global.app);
 var io = require('socket.io')(server);
-var port = app.get('port');
+var chatPort = 7051;
 
-app.use(express.static('public'));
-
-server.listen(port, function () {
-    console.log("Server listening on: http://localhost:%s", port);
-});
-
-app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/index.html');
+server.listen(chatPort, function () {
+  console.log("Server listening on: http://localhost:%s", chatPort);
 });
 
 var usernames = {};
 var rooms = [];
 
 io.sockets.on('connection', function (socket) {
+
+  var createRoom = function(data) {
+      var new_room = data.room;
+      rooms.push(new_room);
+      data.room = new_room;
+      socket.emit('roomcreated', data);
+  };
 
     socket.on('adduser', function (data) {
         var username = data.username;
@@ -33,16 +32,8 @@ io.sockets.on('connection', function (socket) {
             socket.emit('updatechat', 'SERVER', 'You are connected. Start chatting');
             socket.broadcast.to(room).emit('updatechat', 'SERVER', username + ' has connected to this room');
         } else {
-            socket.emit('updatechat', 'SERVER', 'Please enter valid code.');
+          createRoom(data);
         }
-    });
-
-    socket.on('createroom', function (data) {
-        var new_room = ("" + Math.random()).substring(2, 7);
-        rooms.push(new_room);
-        data.room = new_room;
-        socket.emit('updatechat', 'SERVER', 'Your room is ready, invite someone using this ID:' + new_room);
-        socket.emit('roomcreated', data);
     });
 
     socket.on('sendchat', function (data) {
@@ -58,3 +49,12 @@ io.sockets.on('connection', function (socket) {
         }
     });
 });
+
+router.get('/chat', function(req, res, next) {
+  res.json({
+     success: true,
+     data: io.sockets
+   });
+});
+
+module.exports = router;
