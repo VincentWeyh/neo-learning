@@ -40,9 +40,8 @@ var env = process.env.NODE_ENV || 'development';
  * Routes
  */
 
-var chatRouter = require('./chat');
-
-app.use('/', chatRouter);
+app.use('/', require('./chat'));
+app.use('/', require('./board'));
 
 routers.forEach(router => {
   if(_.isFunction(router)) {
