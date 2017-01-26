@@ -70,7 +70,6 @@ module.exports = {
       console.log('document', document[0] );
       var c = new Client();
       c.on('ready', function() {
-        console.log('RADY', document[0].url  ,  document[0].fileName );
         c.get(document[0].url + document[0].fileName, function(err, file) {
           if (err) console.log('err' , err);
           file.once('close', function () {
@@ -79,7 +78,6 @@ module.exports = {
           cb(null, file);
         });
       });
-      console.log('CONNECT');
       c.connect({
         host: '192.168.1.85',
         port: 21,
@@ -89,7 +87,6 @@ module.exports = {
         secureOptions: {rejectUnauthorized:false}
       });
     }).catch(function(err) {
-      console.log('DOCUMENTS ERR : ', err);
       cb(err);
     });
   }

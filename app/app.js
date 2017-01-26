@@ -17,6 +17,7 @@ angular.module('NeoLearning', [
   'NeoLearning.document',
   'NeoLearning.course',
   'NeoLearning.chat',
+  'NeoLearning.board',
   'NeoLearning.navigation',
   'btford.socket-io',
   'ngFileSaver'
@@ -80,9 +81,17 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
     authenticate: true,
   })
   $stateProvider.state('chat', {
-    url: '/dasboard/chat',
+    url: '/dasboard/chat?id',
     views : {
       'container': { templateUrl: 'dashboard/chat/chat.html', controller: 'ChatCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
+    },
+    authenticate: true,
+  })
+  $stateProvider.state('board', {
+    url: '/dasboard/board?id',
+    views : {
+      'container': { templateUrl: 'dashboard/board/board.html', controller: 'BoardCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
     },
     authenticate: true,
