@@ -33,7 +33,6 @@ angular.module('NeoLearning.document', [])
        console.log('document', document);
        var documentRequest = DocumentService.api('document/' + document.idDocument ).get();
        documentRequest.$promise.then(function(result){
-         console.log('TATA : ' ,result.data);
          if(result.success){
 
 
