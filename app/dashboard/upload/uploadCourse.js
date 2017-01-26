@@ -5,7 +5,6 @@ angular.module('NeoLearning.uploadCourse', [])
 
         // COURSE ID (URL)
         var courseId = $stateParams.id;
-        console.log('PARAMS : ', $stateParams);
         var uploader = $scope.uploader = new FileUploader({
             url: $rootScope.url+'\:7029/document'
         });
@@ -21,16 +20,12 @@ angular.module('NeoLearning.uploadCourse', [])
         // on recupere le idUserCourse
         var userCourseRequest = UserCourseService.api('userCourse/'+ userID + '/' + courseId).get()
         .$promise.then(function(result){
-          console.log('ALLO : ', result);
           if(result.success){
-
-            console.log('result.data',result.data);
             // FILTERS
             // a sync filter
             uploader.filters.push({
                 name: 'syncFilter',
                 fn: function(item /*{File|FileLikeObject}*/, options) {
-                    console.log('syncFilter');
                     return this.queue.length < 10;
                 }
             });
@@ -39,7 +34,6 @@ angular.module('NeoLearning.uploadCourse', [])
             uploader.filters.push({
                 name: 'asyncFilter',
                 fn: function(item /*{File|FileLikeObject}*/, options, deferred) {
-                    console.log('asyncFilter');
                     setTimeout(deferred.resolve, 1e3);
                 }
             });
@@ -80,7 +74,6 @@ angular.module('NeoLearning.uploadCourse', [])
             };
             uploader.onCompleteItem = function(fileItem, response, status, headers) {
                 //console.info('onCompleteItem', fileItem, response, status, headers);
-                console.log('----scope.displayedDocuments uploadCtrl----',$scope.displayedDocuments);
                 var documentsRequest = DocumentService.get('documents/' + courseId );
                 documentsRequest.then(function(result){
                   if(result.status){
@@ -92,22 +85,12 @@ angular.module('NeoLearning.uploadCourse', [])
                     //ERROR
                   }
                 })
-                //console.log('after $scope', $scope.displayedDocuments);
             };
             uploader.onCompleteAll = function() {
                 console.info('onCompleteAll');
             };
           }else{
             //ERROR
-            console.log('ERROR');
           }
         })
-
-        // console.log('$stateParams --->',$stateParams);
-
-
-
-
-
-        // console.info('uploader', uploader);
     }]);

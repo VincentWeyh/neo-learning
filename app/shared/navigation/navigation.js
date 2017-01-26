@@ -7,6 +7,7 @@ angular.module('NeoLearning.navigation', [])
   var user = UserService.getUser($window.sessionStorage.token);
   if(user){
       $scope.userName = user.firstName;
+      $scope.lastName = user.lastName;
   }
 
   // GET STUDENTS
@@ -14,7 +15,6 @@ angular.module('NeoLearning.navigation', [])
   var usersRequest = UserService.api('user').get();
   usersRequest.$promise.then(function(result){
     if(result.success){
-      console.log(result.data);
       $scope.displayedStudents = result.data;
       $scope.rowStudents = result.data;
       // fillStudentsTable(result.data);

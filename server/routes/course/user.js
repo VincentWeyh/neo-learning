@@ -8,7 +8,7 @@ module.exports = function(router, DB) {
          });
          return next();
        }
-      DB.userCourse.listUserCourses({idCourse: req.params.id}, function(err, userCourses) {
+      DB.userCourse.listUserCourses({idCourse: req.params.id, enabled: true}, function(err, userCourses) {
         if(err) {
           res.json({
              success: false,
@@ -60,6 +60,13 @@ module.exports = function(router, DB) {
   router.post('/course/:id/user', function(req, res, next) {
     var criteria = [];
     console.log('body : ', req.body);
+    if(req.body.idUsers && !req.body.idUsers.length) {
+      res.json({
+         success: true,
+         data: []
+       });
+       return next();
+    }
     req.body.idUsers.forEach(function(idUser) {
       criteria.push({idUser: idUser, idCourse: req.params.id});
     });
@@ -79,7 +86,14 @@ module.exports = function(router, DB) {
   }),
   router.delete('/course/:id/user', function(req, res, next) {
     var criteria = [];
-    console.log('body : ', req.body);
+    console.log('body delete: ', req.body);
+    if(req.body.idUsers && !req.body.idUsers.length) {
+      res.json({
+         success: true,
+         data: []
+       });
+       return next();
+    }
     req.body.idUsers.forEach(function(idUser) {
       criteria.push({idUser: idUser, idCourse: req.params.id});
     });

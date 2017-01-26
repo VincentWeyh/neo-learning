@@ -7,7 +7,6 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
   courseRequest.$promise.then(function(result){
     if(result.success){
       $scope.course = result.data;
-      console.log('result', result.data);
     }
   })
   $scope.courseId = $stateParams.id;
@@ -28,7 +27,6 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
     var documentsRequest = DocumentService.get('documents/' + $scope.courseId );
     documentsRequest.then(function(result){
       if(result.status){
-        console.log('result.data',result.data);
         $scope.displayedDocuments = result.data.data;
         $scope.rowDocuments = result.data.data;
         // fillStudentsTable(result.data);
@@ -38,20 +36,9 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
     })
   }
 
-  // $scope.displayedStudents = [];
-  // var usersRequest = UserService.api('user').get();
-  // usersRequest.$promise.then(function(result){
-  //   if(result.success){
-  //     console.log('course', result.data);
-  //     $scope.course = result.data;
-  //   }
-  // })
-
-  console.log('id',$stateParams.id);
   $scope.registeredStudents = [];
     var userInCourseRequest = CourseService.api('course/'+ $stateParams.id +'/user').get();
     userInCourseRequest.$promise.then(function(result){
-     console.log('result',result);
      if(result.success){
         $scope.registeredStudents = result.data.studentCourses;
         $scope.rowRegisteredStudents = result.data.studentCourses;
@@ -69,10 +56,8 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
          FileSaver.saveAs(blob, document.originalName);
       }else{
         //ERROR
-    console.log('document', document);
     var documentRequest = DocumentService.api('document/' + document.idDocument ).get();
     documentRequest.$promise.then(function(result){
-      console.log('TATA : ' ,result.data);
       if(result.success){
 
       }

@@ -5,9 +5,6 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
   $scope.itemsByPage=7;
   $scope.validRole=false;
 
-
-  console.log('studentCtrl');
-
   // GET USER INFO
   var user = UserService.getUser($window.sessionStorage.token);
   if(user){
@@ -18,7 +15,6 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
   userRoleListRequest.$promise.then(function(result){
     if(result.success){
       $scope.userRoleList = result.data;
-      console.log('roles list success', result.data);
     }
   })
 
@@ -37,7 +33,6 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
   var usersRequest = UserService.api('user').get();
   usersRequest.$promise.then(function(result){
     if(result.success){
-      console.log('student get success');
       $scope.displayedUsers = result.data;
       $scope.rowUsers = result.data;
     }else{
@@ -47,25 +42,13 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
 
   $scope.checkFormInput = function(){
     $scope.submitted = true;
-    console.log('userIdRole', $scope.userIdRole);
     if (!$scope.userIdRole){
-      console.log('userIdRole', $scope.userIdRole);
       $scope.invalidRole = true;
       $('#roleListInput').addClass('has-error');
       return;
     }
     $scope.addUser();
   }
-
-  // $scope.checkEditFormInput = function(){
-  //   $scope.submitted = true;
-  //   if (!$('#editUserRole').val()){
-  //     $scope.invalidRole = true;
-  //     $('#roleListInput').addClass('has-error');
-  //     return;
-  //   }
-  //   $scope.editUser();
-  // }
 
   $scope.checkRoleValue = function(){
     if(!!$scope.userIdRole){
@@ -75,22 +58,18 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
   }
 
   $scope.addUser = function(){
-    console.log('addUser');
     var user = {
                 firstName: $scope.userFirstName, lastName: $scope.userLastName,
                 email: $scope.userEmail, password: $scope.userPassword, city: $scope.userCity,
                 phone: $scope.userPhone, address: $scope.userAddress, idRole: $scope.userIdRole.idRole,
                 birthdate: $scope.userBirthdate
                }
-    console.log('user',user);
 
     Object.keys(user).forEach(function(key){
       if(!user[key]) {
-        console.log('key', key);
         delete user[key];
       }else{
         if(key == "birthdate"){
-          console.log('birthdate');
           new Date(user[key]);
         }
       }
@@ -113,7 +92,6 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
   }
 
   $scope.openEditUserModal = function(selectedEditableUser){
-    console.log('openuserModal');
     $scope.userFirstName = selectedEditableUser;
     $scope.userIdRole = null;
     $scope.userLastName = null;
@@ -135,7 +113,6 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
   }
 
   $scope.editUser = function(){
-    console.log("editedPassword", $scope.editedPassword);
 
     var user = {
                 firstName: $scope.selectedEditableUser.firstName, lastName: $scope.selectedEditableUser.lastName,
@@ -150,10 +127,8 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
       }
     })
 
-    console.log('user',user);
     UserService.api('user/' + $scope.selectedEditableUser.idUser ).update(user).
     $promise.then(function(result){
-      console.log('result', result);
        if(result.success){
          SweetAlert.swal("Utilisateur édité avec succès !", "", "success");
        }
@@ -192,7 +167,6 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
       },
       function(isConfirm){
           if(isConfirm){
-            console.log('user', user.idUser);
             var userDeleteRequest = CourseService.api('user/' + user.idUser).remove();
             userDeleteRequest.$promise.then(function(result){
               if(result.success){
@@ -205,7 +179,6 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
               else
               {
                 SweetAlert.swal("Erreur lors de la suppression!");
-                console.log('result error', result);
               }
             })
           }

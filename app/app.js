@@ -121,7 +121,6 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
   //$rootScope.url ='http://34.248.83.191';
 
   $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
-    console.log("route changed", UserService.isAuth());
     if (toState.authenticate && !UserService.isAuth()){
       // User isn’t authenticated
       $state.transitionTo("signin");

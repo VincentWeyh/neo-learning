@@ -5,7 +5,11 @@ angular.module('NeoLearning.courses', ['oitozero.ngSweetAlert'])
   $scope.courseId = $stateParams.id;
   $scope.itemsByPage=7;
 
+  var oldRegisteredStudents = [];
   var addedStudents = [];
+  var studentsToAdd= [];
+  var studentsToRemove = [];
+
   $scope.addedStudentsTxt = addedStudents.join(' - ');
 
   // GET USER INFO
@@ -55,10 +59,43 @@ angular.module('NeoLearning.courses', ['oitozero.ngSweetAlert'])
     else
     {
       addedStudents.push(student);
+      $scope.addedStudentsTxt = registeredStudentsNames.join(' - ');
+      // $scope.addedStudentsTxt = addedStudents.join(' - ').lastName;
+    }
+    for(var i = 0; i < addedStudents.length; i++) {
+      registeredStudentsNames.push(addedStudents[i].firstName + " " + addedStudents[i].lastName);
+    }
+      $scope.registeredStudentCount = addedStudents.length;
+      $scope.addedStudentsTxt = registeredStudentsNames.join(' - ');
+  }
+
+  $scope.addMoreStudent = function(student){
+    var registeredStudentsNames = [];
+    var isFound = false;
+    var iteration = 0;
+    if(addedStudents.length > 0){
+      for(var i = 0; i < addedStudents.length; i++) {
+          if (addedStudents[i].idUser == student.idUser) {
+            isFound = true;
+            iteration = i;
+          }
+        }
+        if (isFound){
+          studentsToRemove.push(student);
+          addedStudents.splice(iteration,1);
+        }else{
+          studentsToAdd.push(student);
+          addedStudents.push(student);
+        }
+    }
+    else
+    {
+      studentsToAdd.push(student);
+      addedStudents.push(student);
       $scope.addedStudentsTxt = addedStudents.join(' - ').lastName;
     }
     for(var i = 0; i < addedStudents.length; i++) {
-      registeredStudentsNames.push(addedStudents[i].lastName);
+      registeredStudentsNames.push(addedStudents[i].firstName + " " + addedStudents[i].lastName);
     }
       $scope.registeredStudentCount = addedStudents.length;
       $scope.addedStudentsTxt = registeredStudentsNames.join(' - ');
@@ -68,17 +105,15 @@ angular.module('NeoLearning.courses', ['oitozero.ngSweetAlert'])
     var registeredStudentsNames= [];
     $scope.registeredStudentCount = null;
     $scope.addedStudentsTxt = null;
-    addedStudents = [];
     $(".selectable-row").removeClass("st-selected");
     $scope.selectedEditableCourse = selectedEditableCourse;
-    console.log('selectedCourse', $scope.selectedEditableCourse);
-    var courseStudentAddRequest = CourseService.api('course/'+ selectedEditableCourse.idCourse +'/user').get();
-    courseStudentAddRequest.$promise.then(function(result){
+    CourseService.api('course/'+ selectedEditableCourse.idCourse +'/user').get()
+    .$promise.then(function(result){
      if(result.success){
-        console.log('registeredStudent', result.data.studentCourses);
         addedStudents = result.data.studentCourses;
+        oldRegisteredStudents = JSON.parse(JSON.stringify(result.data.studentCourses));
           for(var i = 0; i < addedStudents.length; i++) {
-            registeredStudentsNames.push(addedStudents[i].firstName);
+            registeredStudentsNames.push(addedStudents[i].lastName + " " + addedStudents[i].firstName);
           }
         $scope.addedStudentsTxt = registeredStudentsNames.join(' - ')
         $('#editModalCourse').modal('show');
@@ -86,13 +121,70 @@ angular.module('NeoLearning.courses', ['oitozero.ngSweetAlert'])
    })}
 
   $scope.editCourse = function(){
-    var courseEditRequest = CourseService.api('course/' + $scope.selectedEditableCourse.idCourse ).update({label: $scope.selectedEditableCourse.label, description: $scope.selectedEditableCourse.description});
-    courseEditRequest.$promise.then(function(result){
-       if(result.success){
-         SweetAlert.swal("Classe éditée avec succès !", "", "success");
-       }
-      $('#editModalCourse').modal('hide');
+    var studentsToRemove = [];
+
+    if(addedStudents.length > 0){
+      if(oldRegisteredStudents.length == 0){
+        studentsToAdd = addedStudents;
+      }
+      //Eleve a supprimer
+      if(oldRegisteredStudents.length > 0 ){
+        for(var i = 0; i < oldRegisteredStudents.length; i++) {
+          var isRemove = true;
+          for(var j = 0; j < addedStudents.length; j++) {
+            if(addedStudents[j].idUser == oldRegisteredStudents[i].idUser) {
+              isRemove = false;
+            }
+          }
+          if(isRemove){
+            studentsToRemove.push(oldRegisteredStudents[i]);
+          }
+        }
+      }
+      addedStudents = addedStudents.filter(function(val) {
+        for(var i = 0; i < oldRegisteredStudents.length; i++){
+          if(val.idUser == oldRegisteredStudents[i].idUser){
+              return false;
+          }
+        }
+        return true;
+      });
+    }else{
+        studentsToRemove = oldRegisteredStudents;
+    }
+
+    var studentsIdToAdd = [];
+    addedStudents.forEach(function(studentToAdd){
+      studentsIdToAdd.push(studentToAdd.idUser);
     })
+
+    var studentsIdToRemove = [];
+    studentsToRemove.forEach(function(studentToRemove){
+      studentsIdToRemove.push(studentToRemove.idUser);
+    })
+
+    CourseService.api('course/' + $scope.selectedEditableCourse.idCourse ).update({label: $scope.selectedEditableCourse.label, description: $scope.selectedEditableCourse.description})
+    .$promise.then(function(resultEditCourse){
+     if(resultEditCourse.success){
+       CourseService.api('course/' + $scope.selectedEditableCourse.idCourse + '/user').post({ idUsers: studentsIdToAdd})
+       .$promise.then(function(resultStudentToAdd){
+         if(resultStudentToAdd.success){
+           CourseService.remove('course/' + $scope.selectedEditableCourse.idCourse + '/user', {idUsers: studentsIdToRemove})
+           .then(function(resultStudentToRemove){
+             if(resultStudentToRemove.status === 200){
+               SweetAlert.swal("Classe éditée avec succès !", "", "success");
+             }else{
+               SweetAlert.swal("Une erreur est survenue (" + resultStudentToRemove.message + ")", "", "error");
+             }
+           });
+         }else{
+           SweetAlert.swal("Une erreur est survenue (" + resultStudentToAdd.message + ")", "", "error");
+         }
+       })
+     }
+     $('#editModalCourse').modal('hide');
+    })
+
   }
 
   $scope.openNewModalCourse = function(){
@@ -112,8 +204,6 @@ angular.module('NeoLearning.courses', ['oitozero.ngSweetAlert'])
          if(result.success){
            $scope.displayedCourses.push(result.data);
            $scope.rowCourses.push(result.data);
-           console.log('courseId', resultId.data);
-           console.log('addedStudent', addedStudents);
            var addedStudentsId = [];
            addedStudents.forEach(function(value, key){
              addedStudentsId.push(value.idUser);
@@ -123,7 +213,7 @@ angular.module('NeoLearning.courses', ['oitozero.ngSweetAlert'])
              if(result.success){
                SweetAlert.swal("La classe " + $scope.courseName + " ajoutée avec succès !", "", "success");
              }else{
-               SweetAlert.swal("Une erreur est survenue (" + result + ")", "", "error");
+               SweetAlert.swal("Une erreur est survenue (" + result.message + ")", "", "error");
              }
            })
            $('#newModalCourse').modal('hide');
@@ -132,7 +222,7 @@ angular.module('NeoLearning.courses', ['oitozero.ngSweetAlert'])
       }
       else
       {
-        SweetAlert.swal("Une erreur est survenue ()", "", "error");
+        SweetAlert.swal("Une erreur est survenue (" + resultId.message + ")", "", "error");
       }
     })
   }
@@ -163,7 +253,6 @@ angular.module('NeoLearning.courses', ['oitozero.ngSweetAlert'])
               else
               {
                 SweetAlert.swal("Erreur lors de la suppression!");
-                console.log('result error', result);
               }
             })
           }
