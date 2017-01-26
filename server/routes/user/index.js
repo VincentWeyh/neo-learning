@@ -113,7 +113,7 @@ router.put('/user/:id', function(req, res, next) {
        return next();
     }
     res.json({
-       success: true
+       success: true,
      });
   });
 });

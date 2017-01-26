@@ -1,7 +1,79 @@
 'use strict';
 
 angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
-.controller('CourseCtrl', ['$scope', '$rootScope', '$state', '$stateParams', '$window', '$filter', 'UserService', 'CourseService', 'DocumentService', 'SweetAlert', 'FileSaver', function($scope, $rootScope, $state, $stateParams, $window, $filter, UserService, CourseService, DocumentService, SweetAlert, FileSaver) {
+.factory('socket', function (socketFactory) {
+    return socketFactory({
+      ioSocket: io.connect('localhost:7050')
+    });
+}).controller('CourseCtrl', ['$scope', '$rootScope', '$state', '$stateParams', '$window', '$filter', 'UserService', 'CourseService', 'DocumentService', 'SweetAlert', 'FileSaver', 'socket', function($scope, $rootScope, $state, $stateParams, $window, $filter, UserService, CourseService, DocumentService, SweetAlert, FileSaver, socket) {
+
+  $scope.users = [];
+  $scope.usersConnected = [];
+  $scope.messages = {};
+  $scope.messages[UserService.getUser($window.sessionStorage.token).idUser] = {};
+  $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message = '';
+
+  $scope.getMessage = function(data) {
+    if(typeof data !== 'undefined') {
+      $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message = data;
+    }
+    return $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message;
+  };
+
+  $scope.enter = function(keyEvent, message) {
+    if (keyEvent.which === 13) {
+      $scope.doPost($scope.getMessage());
+    }
+  };
+
+  socket.on('connect', function () {
+    $scope.joinRoom({});
+  });
+
+  socket.on('updatechat', function (username, data, usersConnected) {
+    var user = {};
+    $scope.usersConnected = usersConnected;
+    user.username = username;
+    user.message = data;
+    user.date = new Date().getTime();
+    user.image = 'http://dummyimage.com/100x100/000/fff&text=' + username.charAt(0).toUpperCase();
+    $scope.users.push(user);
+    setTimeout(function() {
+     var element = document.getElementById("yourDivID");
+     var inputData = document.getElementById("data");
+     inputData.value = '';
+     $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message = '';
+     element.scrollTop = element.scrollHeight;
+    }, 0);
+  });
+
+  socket.on('roomcreated', function (data) {
+    socket.emit('adduser', data);
+  });
+
+  $scope.joinRoom = function (data) {
+    var user = UserService.getUser($window.sessionStorage.token);
+    data.username = user.firstName + '_' + user.lastName;
+    data.room = $stateParams.id;
+    $scope.currentUser = data.username;
+    console.log(data.username);
+    socket.emit('userconnect', data.username);
+    socket.emit('adduser', data);
+  }
+
+  $scope.doPost = function (message) {
+    if(!message) {
+      return;
+    }
+    socket.emit('sendchat', message);
+    setTimeout(function() {
+     var element = document.getElementById("yourDivID");
+     var inputData = document.getElementById("data");
+     inputData.value = '';
+     $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message = '';
+     element.scrollTop = element.scrollHeight;
+    }, 0);
+  }
 
   CourseService.api('course/' + $stateParams.id).get()
   .$promise.then(function(result){

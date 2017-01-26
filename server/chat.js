@@ -10,12 +10,17 @@ server.listen(chatPort, function () {
 
 var usernames = {};
 var rooms = [];
+var roomsUsers = [];
 
 io.sockets.on('connection', function (socket) {
 
   var createRoom = function(data) {
+    console.log('data server',data);
       var new_room = data.room;
       rooms.push(new_room);
+      if(roomsUsers.indexOf(data.username) === -1) {
+        roomsUsers.push(data.username);
+      }
       data.room = new_room;
       socket.emit('roomcreated', data);
   };
@@ -28,8 +33,11 @@ io.sockets.on('connection', function (socket) {
             socket.username = username;
             socket.room = room;
             usernames[username] = username;
+            if(roomsUsers.indexOf(data.username) === -1) {
+              roomsUsers.push(data.username);
+            }
             socket.join(room);
-            socket.emit('updatechat', 'SERVER', 'You are connected. Start chatting');
+            socket.emit('updatechat', 'SERVER', 'You are connected. Start chatting', roomsUsers);
             socket.broadcast.to(room).emit('updatechat', 'SERVER', username + ' has connected to this room');
         } else {
           createRoom(data);
@@ -37,14 +45,18 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('sendchat', function (data) {
-        io.sockets.in(socket.room).emit('updatechat', socket.username, data);
+        io.sockets.in(socket.room).emit('updatechat', socket.username, data, roomsUsers);
+    });
+
+    socket.on('userconnect', function (data) {
+      io.sockets.emit('userconnection', data);
     });
 
     socket.on('disconnect', function () {
         delete usernames[socket.username];
         io.sockets.emit('updateusers', usernames);
         if (socket.username !== undefined) {
-            socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
+            socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected', roomsUsers);
             socket.leave(socket.room);
         }
     });
