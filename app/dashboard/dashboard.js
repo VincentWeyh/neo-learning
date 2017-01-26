@@ -8,7 +8,7 @@ angular.module('NeoLearning.dashboard', [])
   if(user){
       $scope.userName = user.firstName;
       $scope.user = user;
-    
+
   }
 
   // GET STUDENTS
@@ -44,7 +44,6 @@ angular.module('NeoLearning.dashboard', [])
 
   userCourseRequest.$promise.then(function(result){
     if(result.success){
-      console.log('result mes cours ', result);
       // si user = teacher
       // if (user.idRole == 1111 ){
       //   $scope.displayedCoursesTeacher = result.data.teacherCourses;

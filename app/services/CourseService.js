@@ -8,6 +8,7 @@ angular.module("NeoLearning")
             post: { method: "POST"},
             get: { method: "GET"},
             update: { method: "PUT"},
+            remove: { method: "DELETE"}
         });
       },
       remove: function(url, data){

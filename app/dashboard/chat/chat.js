@@ -13,7 +13,7 @@ angular.module('NeoLearning.chat', ['btford.socket-io'])
   $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message = '';
 
   $scope.getMessage = function(data) {
-    if(data) {
+    if(typeof data !== 'undefined') {
       $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message = data;
     }
     return $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message;

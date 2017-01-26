@@ -85,7 +85,7 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
                 phone: $scope.userPhone, address: $scope.userAddress, idRole: $scope.userIdRole.idRole,
                 birthdate: $scope.userBirthdate
                }
-
+    console.log('birthdate' , $scope.userBirthdate);
     Object.keys(user).forEach(function(key){
       if(!user[key]) {
         delete user[key];
@@ -103,6 +103,7 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
         user.idUser = result.data;
         $scope.displayedUsers.push(user);
         $scope.rowUsers.push(user);
+        console.log('addedUser', user);
         SweetAlert.swal("L'utilisateur " + user.firstName + " " + user.lastName + " à été ajouté avec succès !", "", "success");
       }else{
         $('#newModalUser').modal('hide');
@@ -125,7 +126,10 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
     $scope.userBirthdate = null;
     $scope.registeredStudentCount = null;
     $scope.addedStudentsTxt = null;
-    selectedEditableUser.birthdate= selectedEditableUser.birthdate.substring(0,10);
+    console.log(selectedEditableUser);
+    if(selectedEditableUser.birthdate){
+      selectedEditableUser.birthdate = selectedEditableUser.birthdate.toString().substring(0,10);
+    }
     $scope.selectedEditableUser = selectedEditableUser;
     $scope.editableRole = selectedEditableUser.idRole;
     $('#selectedUserBirthdate').val(selectedEditableUser.birthdate);
