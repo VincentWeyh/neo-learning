@@ -9,7 +9,7 @@ angular.module('NeoLearning', [
   'smart-table',
   'angularFileUpload',
   'NeoLearning.signin',
-  
+
   'NeoLearning.uploadCourse',
   'NeoLearning.dashboard',
   'NeoLearning.student',
@@ -79,7 +79,7 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
     authenticate: true,
   })
   $stateProvider.state('chat', {
-    url: '/dasboard/chat',
+    url: '/dasboard/chat?id',
     views : {
       'container': { templateUrl: 'dashboard/chat/chat.html', controller: 'ChatCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}

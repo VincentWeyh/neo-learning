@@ -1,22 +1,33 @@
 'use strict';
 
 angular.module('NeoLearning.chat', ['btford.socket-io'])
-  .factory('socket' , function (socketFactory, $rootScope) {
+  .factory('socket', function (socketFactory) {
     return socketFactory({
-      ioSocket: io.connect($rootScope.url+':7050')
+      ioSocket: io.connect('localhost:7050')
     });
 }).controller('ChatCtrl', ['$scope', '$stateParams',  '$window', '$filter', 'UserService', 'CourseService', 'socket', function($scope, $stateParams, $window, $filter, UserService, CourseService, socket) {
-  $scope.courseId = $stateParams.id;
 
   $scope.users = [];
+  $scope.messages = {};
+  $scope.messages[UserService.getUser($window.sessionStorage.token).idUser] = {};
+  $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message = '';
+
+  $scope.getMessage = function(data) {
+    if(data) {
+      $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message = data;
+    }
+    return $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message;
+  };
 
   $scope.enter = function(keyEvent, message) {
     if (keyEvent.which === 13) {
-      $scope.doPost(message);
+      $scope.doPost($scope.getMessage());
     }
-  }
+  };
 
-  socket.on('connect', function () { });
+  socket.on('connect', function () {
+    $scope.joinRoom({});
+  });
 
   socket.on('updatechat', function (username, data) {
     var user = {};
@@ -29,7 +40,7 @@ angular.module('NeoLearning.chat', ['btford.socket-io'])
      var element = document.getElementById("yourDivID");
      var inputData = document.getElementById("data");
      inputData.value = '';
-     $scope.message = '';
+     $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message = '';
      element.scrollTop = element.scrollHeight;
     }, 0);
   });
@@ -41,6 +52,7 @@ angular.module('NeoLearning.chat', ['btford.socket-io'])
   $scope.joinRoom = function (data) {
     var user = UserService.getUser($window.sessionStorage.token);
     data.username = user.firstName + '_' + user.lastName;
+    data.room = $stateParams.id;
     $scope.currentUser = data.username;
     socket.emit('adduser', data);
   }
@@ -54,7 +66,7 @@ angular.module('NeoLearning.chat', ['btford.socket-io'])
      var element = document.getElementById("yourDivID");
      var inputData = document.getElementById("data");
      inputData.value = '';
-     $scope.message = '';
+     $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message = '';
      element.scrollTop = element.scrollHeight;
     }, 0);
   }
