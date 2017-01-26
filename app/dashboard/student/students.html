@@ -1,15 +1,201 @@
 <div class="container-fluid">
-
     <!-- Page Heading -->
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                Les élèves
+              Utilisateurs
             </h1>
-            <ol class="breadcrumb">
-                <li class="active">
+            <ol class="breadcrumb" >
+                <li class="active" >
+                  <button type="button" ng-click="openNewModalUser()" class="btn btn-sm btn-success">
+                    <i class="glyphicon glyphicon-remove-circle">
+                    </i>
+                    Ajouter un utilisateur
+                  </button>
                 </li>
             </ol>
         </div>
     </div>
+</div>
+
+<div class="panel-body">
+  <table st-table="displayedUsers" class="table table-striped" st-safe-src="rowUsers">
+    <thead>
+      <tr>
+        <th st-sort="lastName">Nom</th>
+        <th st-sort="firstName">Prenom</th>
+        <th st-sort="email">Email</th>
+        <th st-sort="createdAt">Date création</th>
+        <th st-sort="updatedAt">Date modification</th>
+        <th width="25px"></th>
+        <th width="25px"></th>
+        <th width="25px"></th>
+      </tr>
+      <tr>
+        <th colspan="8"><input st-search="" class="form-control" placeholder="Rechercher un utilisateur ..." type="text"/></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="selectable-row" ng-repeat="user in displayedUsers">
+        <td>{{user.firstName}}</td>
+        <td>{{user.lastName}}</td>
+        <td>{{user.email}}</td>
+        <td></td>
+        <td></td>
+        <td>
+          <button type="button" ng-click="goToStudentDetail(user)" class="btn btn-sm btn-success">
+            <i class="fa fa-info-circle" aria-hidden="true"></i>
+          </button>
+        </td>
+        <td>
+          <button type="button" ng-click="openEditUserModal(user)" class="btn btn-sm btn-info">
+            <i class="glyphicon glyphicon glyphicon-pencil">
+            </i>
+          </button>
+        </td>
+        <td>
+          <button type="button" ng-click="removeUser(user)" class="btn btn-sm btn-danger">
+            <i class="glyphicon glyphicon-remove-circle">
+            </i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- addUser Modal -->
+<div class="modal fade" id="newModalUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Création d'un utilisateur</h4>
+      </div>
+      <div class="modal-body">
+        <form id="login-form" name="form" ng-submit="addUser()" role="form">
+          <div class="form-group" id="roleListInput">
+            <label for="userEmail">Rôle *:</label>
+            <select ng-change="checkRoleValue()" class="form-control" ng-options="role as role.label for role in userRoleList track by role.idRole" required ng-model="userIdRole">
+              <option value="" disabled>-- Choississez un rôle --</option>
+            </select>
+            <div ng-model="roleError" ng-show="invalidRole" class="help-block">Rôle requis</div>
+          </div>
+          <div class="form-group" ng-class="{ 'has-error': submitted && form.userFirstName.$error.required }">
+            <label for="userFirstName">Prenom *: </label>
+            <input type="text" class="form-control" name="userFirstName" id="userFirstName" ng-model="userFirstName" required></textarea>
+            <div ng-show="submitted && form.userFirstName.$error.required" class="help-block">Prenom requis</div>
+          </div>
+          <div class="form-group" ng-class="{ 'has-error': submitted && form.userLastName.$error.required }">
+            <label for="userLastName">Nom *:</label>
+            <input type="text" class="form-control" name="userLastName" ng-model="userLastName" required>
+            <div ng-show="submitted && form.userLastName.$error.required" class="help-block">Nom requis</div>
+          </div>
+          <div class="form-group" ng-class="{ 'has-error': submitted && form.userEmail.$error.required }">
+            <label for="userEmail">Email *:</label>
+            <input type="text" class="form-control" name="userEmail" ng-model="userEmail" required></textarea>
+            <div ng-show="submitted && form.userEmail.$error.required" class="help-block">Email requis</div>
+          </div>
+          <div class="form-group" ng-class="{ 'has-error': submitted && form.userPassword.$error.required }">
+            <label for="userPassword">Mot de passe *:</label>
+            <input type="text" class="form-control" name="userPassword" id="userPassword" ng-model="userPassword" required></textarea>
+            <div ng-show="submitted && form.userPassword.$error.required" class="help-block">Mot de passe requis</div>
+          </div>
+          <div class="form-group">
+            <label for="userCity">Ville:</label>
+            <input type="text" class="form-control" name="userCity" ng-model="userCity"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="userPhone">Téléphone:</label>
+            <input type="text" class="form-control" name="userPhone" ng-model="userPhone" id="userPhone"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="userAddress">Adresse:</label>
+            <input type="text" class="form-control" name="userAddress" ng-model="userAddress" id="userAddress"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="userBirthdate">Date de naissance:</label>
+            <p class="input-group">
+              <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" clear-text="Effacer" current-text="Aujourd'hui" close-text="Fermer" alt-input-formats="altInputFormats" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
+            <!-- <input type="text" class="form-control" name="userBirthdate" ng-model="userBirthdate" id="userBirthdate"></textarea> -->
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+        <button type="submit" class="btn btn-success" ng-click="checkFormInput()">Créer utilisateur</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- editUser Modal -->
+<div class="modal fade" id="editModalUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Edition de l'utilisateur {{selectedEditableUser.firstName}} {{selectedEditableUser.lastName}}</h4>
+      </div>
+      <div class="modal-body">
+        <form id="editUserForm" ng-submit="editUser()" role="form">
+          <div class="form-group">
+            <label for="userEmail">Rôle *:</label>
+            <select class="form-control" id="editUserRole" ng-options="role as role.label for role in userRoleList track by role.idRole" ng-model="editableRole">
+              <option value="" disabled>-- Choississez un rôle --</option>
+            </select>
+          </div>
+          <div class="form-group" ng-class="{ 'has-error': submitted && form.selectedEditableUser.firstName.$error.required }">
+            <label for="userFirstName">Prenom *:</label>
+            <input type="text" class="form-control" name="userFirstName" ng-model="selectedEditableUser.firstName" id="userFirstName"></textarea>
+            <div ng-show="submitted && form.selectedEditableUser.firstName.$error.required" class="help-block">Prenom requis</div>
+          </div>
+          <div class="form-group" ng-class="{ 'has-error': submitted && form.selectedEditableUser.lastName.$error.required }">
+            <label for="userLastName">Nom *:</label>
+            <input type="text" class="form-control" name="userLastName" ng-model="selectedEditableUser.lastName" id="userLastName">
+            <div ng-show="submitted && form.userLastName.$error.required" class="help-block">Nom requis</div>
+          </div>
+          <!-- <div class="form-group" ng-class="{ 'has-error': submitted && form.selectedEditableUser.email.$error.required }">
+            <label for="userEmail">Email *:</label>
+            <input type="text" class="form-control" name="selectedEditableUser.email" ng-model="selectedEditableUser.email" id="userEmail"></textarea>
+            <div ng-show="submitted && form.userEmail.$error.required" class="help-block">Email requis</div>
+          </div> -->
+          <div class="form-group" ng-class="{ 'has-error': submitted && form.selectedEditableUser.password.$error.required }">
+            <label for="userPassword">Mot de passe *:</label>
+            <input type="text" class="form-control" ng-model="editedPassword" id="editedPassword"></textarea>
+            <div ng-show="submitted && form.userPassword.$error.required" class="help-block">Mot de passe requis</div>
+          </div>
+          <div class="form-group">
+            <label for="userCity">Ville:</label>
+            <input type="text" class="form-control" name="userCity" ng-model="selectedEditableUser.city" id="userCity"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="userPhone">Téléphone:</label>
+            <input type="text" class="form-control" name="userPhone" ng-model="selectedEditableUser.phone" id="userPhone"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="userAddress">Adresse:</label>
+            <input type="text" class="form-control" name="userAddress" ng-model="selectedEditableUser.address" id="userAddress"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="userBirthdate">Date de naissance:</label>
+            <p class="input-group">
+              <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="selectedEditableUser.birthdate" is-open="popup1.opened" datepicker-options="dateOptions" clear-text="Effacer" current-text="Aujourd'hui" close-text="Fermer" alt-input-formats="altInputFormats" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+            <button type="submit" ng-click="editUser()" class="btn btn-success">Editer l'utilisateur</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

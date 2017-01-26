@@ -55,7 +55,7 @@ router.post('/course', function(req, res, next) {
        success: true,
        data: course
      });
-    return next();
+    next();
   });
 });
 
@@ -71,6 +71,7 @@ router.put('/course/:id', function(req, res, next) {
     res.json({
        success: true
      });
+    next();
   });
 });
 

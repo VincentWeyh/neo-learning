@@ -1,18 +1,15 @@
 'use strict';
 
 angular.module('NeoLearning.uploadCourse', [])
-      .controller('UploadCourseCtrl', ['$scope', '$stateParams', '$window', 'FileUploader', 'UserService', 'UserCourseService', '$rootScope', function($scope, $stateParams, $window, FileUploader, UserService, UserCourseService, $rootScope) {
+      .controller('UploadCourseCtrl', ['$scope', '$stateParams', '$window', 'FileUploader', 'UserService', 'UserCourseService', 'DocumentService', '$rootScope', function($scope, $stateParams, $window, FileUploader, UserService, UserCourseService, DocumentService, $rootScope) {
 
         // COURSE ID (URL)
         var courseId = $stateParams.id;
+        console.log('PARAMS : ', $stateParams);
         var uploader = $scope.uploader = new FileUploader({
-          url: ''
+            url: $rootScope.url+'\:7029/document'
         });
-        // var uploader = $scope.uploader = new FileUploader({
-        //     url: 'http://localhost:7029/document'
-        //
-        // });
-        // GET USER INFO
+
         var user = UserService.getUser($window.sessionStorage.token);
         if(user){
           //on recupere le userId
@@ -20,22 +17,14 @@ angular.module('NeoLearning.uploadCourse', [])
             var userID = user.idUser;
 
         }
+
         // on recupere le idUserCourse
-        var userCourseRequest = UserCourseService.api('userCourse/'+ userID + '/' + courseId).get();
-        userCourseRequest.$promise.then(function(result){
+        var userCourseRequest = UserCourseService.api('userCourse/'+ userID + '/' + courseId).get()
+        .$promise.then(function(result){
+          console.log('ALLO : ', result);
           if(result.success){
 
             console.log('result.data',result.data);
-
-            uploader = $scope.uploader = new FileUploader({
-                url: $rootScope.url+'\:7029/document',
-                formData: [{
-                  idUserCourse: result.data[0].idUserCourse,
-                  idCourse: courseId,
-                  description: 'desc'
-                }]
-            });
-
             // FILTERS
             // a sync filter
             uploader.filters.push({
@@ -61,12 +50,18 @@ angular.module('NeoLearning.uploadCourse', [])
             };
             uploader.onAfterAddingFile = function(fileItem) {
                 console.info('onAfterAddingFile', fileItem);
+
             };
             uploader.onAfterAddingAll = function(addedFileItems) {
                 console.info('onAfterAddingAll', addedFileItems);
             };
             uploader.onBeforeUploadItem = function(item) {
                 console.info('onBeforeUploadItem', item);
+                item.formData = [{
+                    idUserCourse: result.data[0].idUserCourse,
+                    idCourse: courseId,
+                    description: 'desc'
+                  }];
             };
             uploader.onProgressItem = function(fileItem, progress) {
                 console.info('onProgressItem', fileItem, progress);
@@ -84,7 +79,8 @@ angular.module('NeoLearning.uploadCourse', [])
                 console.info('onCancelItem', fileItem, response, status, headers);
             };
             uploader.onCompleteItem = function(fileItem, response, status, headers) {
-                console.info('onCompleteItem', fileItem, response, status, headers);
+                $rootScope.resfreshDocument();
+
             };
             uploader.onCompleteAll = function() {
                 console.info('onCompleteAll');
@@ -95,11 +91,4 @@ angular.module('NeoLearning.uploadCourse', [])
           }
         })
 
-        // console.log('$stateParams --->',$stateParams);
-
-
-
-
-
-        console.info('uploader', uploader);
     }]);

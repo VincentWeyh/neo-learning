@@ -6,10 +6,11 @@ angular.module('NeoLearning', [
   'ngResource',
   'LocalStorageModule',
   'ui.router',
+  'ngMaterial',
   'smart-table',
   'angularFileUpload',
+  'ui.bootstrap',
   'NeoLearning.signin',
-
   'NeoLearning.uploadCourse',
   'NeoLearning.dashboard',
   'NeoLearning.student',
