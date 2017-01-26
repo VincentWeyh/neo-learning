@@ -13,46 +13,11 @@
   </div>
   <!-- Top Menu Items -->
   <ul class="nav navbar-right top-nav">
-      <!-- <li class="dropdown">
-          <a class="dropdown-toggle item" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
-          <ul class="dropdown-menu message-dropdown">
-              <li class="message-preview">
-                  <a href="#">Read All New Messages</a>
-              </li>
-          </ul>
-      </li> -->
-      <!-- <li class="dropdown">
-          <a href="" class="item dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <b class="caret"></b></a>
-          <ul class="dropdown-menu alert-dropdown">
-              <li>
-                  <a href="#">Alert Name <span class="label label-default">Alert Badge</span></a>
-              </li>
-              <li>
-                  <a href="#">Alert Name <span class="label label-primary">Alert Badge</span></a>
-              </li>
-              <li>
-                  <a href="#">Alert Name <span class="label label-success">Alert Badge</span></a>
-              </li>
-              <li>
-                  <a href="#">Alert Name <span class="label label-info">Alert Badge</span></a>
-              </li>
-              <li>
-                  <a href="#">Alert Name <span class="label label-warning">Alert Badge</span></a>
-              </li>
-              <li>
-                  <a href="#">Alert Name <span class="label label-danger">Alert Badge</span></a>
-              </li>
-              <li class="divider"></li>
-              <li>
-                  <a href="#">View All</a>
-              </li>
-          </ul>
-      </li> -->
       <li class="dropdown">
           <a href="" class="item dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{userName}} {{lastName}} <b class="caret"></b></a>
           <ul class="dropdown-menu alert-dropdown">
               <li>
-                  <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+                  <a ui-sref="profile"><i class="fa fa-fw fa-user"></i> Profile</a>
               </li>
               <li>
                   <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
@@ -79,7 +44,7 @@
               <a ui-sref="dashboard"><i class="fa fa-fw fa-dashboard"></i> Tableau de bord </a>
           </li>
           <li>
-              <a ui-sref="courses" data-toggle="collapse" data-target="#demo"><i class="fa fa-graduation-cap" aria-hidden="true"></i> Les classes <i class="fa fa-fw fa-caret-down"></i></a>
+              <a ui-sref="courses" data-toggle="collapse" data-target="#demo"><i class="fa fa-graduation-cap" aria-hidden="true"></i> Les classes</a>
               <!-- <ul id="demo" class="collapse">
                   <li>
                       <a href="#">Dropdown Item</a>

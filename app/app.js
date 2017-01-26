@@ -20,6 +20,7 @@ angular.module('NeoLearning', [
   'NeoLearning.navigation',
   'NeoLearning.chat',
   'NeoLearning.board',
+  'NeoLearning.profile',
   'NeoLearning.navigation',
   'btford.socket-io',
   'ngFileSaver'
@@ -43,6 +44,14 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
     url: '/dashboard',
     views : {
       'container': { templateUrl: '/dashboard/dashboard.html', controller: 'DashCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
+    },
+    authenticate: true,
+  })
+  $stateProvider.state('profile', {
+    url: '/profile',
+    views : {
+      'container': { templateUrl: '/dashboard/profile/profile.html', controller: 'ProfileCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
     },
     authenticate: true,
