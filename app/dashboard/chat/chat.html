@@ -1,15 +1,12 @@
-<i class="fa fa-spin fa-refresh fa-5x" id="loader" style="display: none;"></i>
-<div class="container ng-scope">
-  <h2>Private Chat Application with Node.js, Socket.IO and AngularJS</h2>
-  <hr>
-  <div class="row">
+<div class="row">
+
     <div id="yourDivID" class="col-lg-8" style="overflow:auto; height:550px">
       <div class="row" id="userList" style="display: block;">
-        <div ng-repeat="user in users" class="col-sm-12 ng-scope" >
+        <div ng-repeat="user in users" class="col-sm-12 " >
           <div class="row" ng-if="user">
             <div class="col-xs-2" ng-class="{'col-xs-push-10' : (user.username == curtrentUser)}">
               <img ng-src=" {{user.image}} " class="img-thumbnail img-responsive img-circle pull-left " ng-class-even="pull-right
-              " ng-class-odd="pull-left " style="width:70px; ">
+              " ng-class-odd="pull-left " style=" ">
             </div>
             <div class="col-xs-10" ng-class="{'col-xs-pull-2' : (user.username == curtrentUser)}">
               <div class="panel panel-default ">
@@ -23,7 +20,7 @@
       </div>
       <div class="clearfix "></div>
     </div>
-    <div class="col-lg-4 ">
+    <div class="col-lg-4 " style="display:">
       <h4>Join Room</h4>
       <div class="form-group ">
         <label for="exampleInputEmail1 ">Room Code</label>
@@ -31,9 +28,37 @@
       </div>
       <button type="submit " id="join " ng-click="joinRoom(join) " class="btn btn-default ">Submit</button>
       <hr>
-      <div class="clearfix "></div>
-    </div>
 
+      <!-- <div class="clearfix "></div> -->
+
+    </div>
+    <div class="col-lg-4">
+      <h3>Utilisateurs </h3>
+      <div class="media">
+        <a href="#" class="pull-left">
+          <img alt="64x64" data-src="holder.js/64x64" class="media-object img-thumbnail" style="width: 64px; height: 64px;" src="http://placehold.it/64x64">
+        </a>
+        <div class="media-body">
+          <h3 class="media-heading"><strong><a href="#">Raoul Boulard</a></strong></h3>
+          <p class="small">Dernière visite <span class="glyphicon glyphicon-time timestamp" data-toggle="tooltip" data-placement="bottom" title="Lundi 24 Avril 2014 à 18h25"></span> il y a 12 jours</p>
+        </div>
+      </div>
+
+      <div class="media">
+        <a href="#" class="pull-left">
+          <img alt="64x64" data-src="holder.js/64x64" class="media-object img-thumbnail" style="width: 64px; height: 64px;" src="http://placehold.it/64x64">
+        </a>
+        <div class="media-body">
+          <h3 class="media-heading"><strong><a href="#">Raoul Boulard</a></strong></h3>
+          <p class="small">Dernière visite <span class="glyphicon glyphicon-time timestamp" data-toggle="tooltip" data-placement="bottom" title="Lundi 24 Avril 2014 à 18h25"></span> il y a 12 jours</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+  </diV>
+  <div class = "row">
     <div class="col-lg-12 ">
       <h2 class="text-center ">Got something to say?</h2>
       <div class="input-group ">
@@ -44,5 +69,3 @@
       </div>
     </div>
   </div>
-</div>
-</div>
