@@ -6,8 +6,9 @@ angular.module('NeoLearning.navigation', [])
   // GET USER INFO
   var user = UserService.getUser($window.sessionStorage.token);
   if(user){
-      $scope.userName = user.firstName;
-      $scope.lastName = user.lastName;
+    $scope.userName = user.firstName;
+    $scope.lastName = user.lastName;
+    $scope.user = user;
   }
 
   // GET STUDENTS

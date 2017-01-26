@@ -22,6 +22,15 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
     $scope.userName = user.firstName;
   }
 
+  CourseService.api('course/'+ $scope.courseId).get().$promise
+  .then(function(result){
+     if(result.success){
+       $scope.course= result.data;
+     }else{
+       //ERROR
+     }
+   })
+
   $rootScope.resfreshDocument = function(){
     var documentsRequest = DocumentService.get('documents/' + $scope.courseId );
     documentsRequest.then(function(result){

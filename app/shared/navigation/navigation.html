@@ -78,8 +78,8 @@
           <li class="active">
               <a ui-sref="dashboard"><i class="fa fa-fw fa-dashboard"></i> Tableau de bord </a>
           </li>
-          <li>
-              <a ui-sref="courses" data-toggle="collapse" data-target="#demo"><i class="fa fa-graduation-cap" aria-hidden="true"></i> Les classes <i class="fa fa-fw fa-caret-down"></i></a>
+          <li ng-if="user.idRole == 1111">
+              <a ui-sref="courses" data-toggle="collapse" data-target="#demo"><i class="fa fa-graduation-cap" aria-hidden="true"></i> Les classes </a>
               <!-- <ul id="demo" class="collapse">
                   <li>
                       <a href="#">Dropdown Item</a>
@@ -89,7 +89,7 @@
                   </li>
               </ul> -->
           </li>
-          <li>
+          <li ng-if="user.idRole ==1111">
               <a ui-sref="students"><i class="fa fa-users" aria-hidden="true"></i> Utilisateurs </a>
           </li>
           <li>

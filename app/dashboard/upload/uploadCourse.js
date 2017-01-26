@@ -44,7 +44,6 @@ angular.module('NeoLearning.uploadCourse', [])
       };
       uploader.onAfterAddingFile = function(fileItem) {
           console.info('onAfterAddingFile', fileItem);
-
       };
       uploader.onAfterAddingAll = function(addedFileItems) {
           console.info('onAfterAddingAll', addedFileItems);
@@ -77,6 +76,37 @@ angular.module('NeoLearning.uploadCourse', [])
         var documentsRequest = DocumentService.get('documents/' + courseId );
         documentsRequest.then(function(result){
           if(result.status){
+
+            };
+            uploader.onAfterAddingAll = function(addedFileItems) {
+                console.info('onAfterAddingAll', addedFileItems);
+            };
+            uploader.onBeforeUploadItem = function(item) {
+                console.info('onBeforeUploadItem', item);
+                item.formData = [{
+                    idUserCourse: result.data[0].idUserCourse,
+                    idCourse: courseId,
+                    description: 'desc'
+                  }];
+            };
+            uploader.onProgressItem = function(fileItem, progress) {
+                console.info('onProgressItem', fileItem, progress);
+            };
+            uploader.onProgressAll = function(progress) {
+                console.info('onProgressAll', progress);
+            };
+            uploader.onSuccessItem = function(fileItem, response, status, headers) {
+                console.info('onSuccessItem', fileItem, response, status, headers);
+            };
+            uploader.onErrorItem = function(fileItem, response, status, headers) {
+                console.info('onErrorItem', fileItem, response, status, headers);
+            };
+            uploader.onCancelItem = function(fileItem, response, status, headers) {
+                console.info('onCancelItem', fileItem, response, status, headers);
+            };
+            uploader.onCompleteItem = function(fileItem, response, status, headers) {
+            // on refresh document du $scope Course.js
+            $rootScope.resfreshDocument();
 
             $scope.displayedDocuments = result.data.data;
             $scope.rowDocuments = result.data.data;

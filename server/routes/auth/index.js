@@ -14,6 +14,7 @@ router.post('/auth', function(req, res, next) {
   }
 
   DB.user.getUser(req.body.email, function(err, user) {
+    
     if(err) {
       console.log(err);
       res.json({
@@ -27,6 +28,7 @@ router.post('/auth', function(req, res, next) {
         delete user.password;
         delete user.salt;
         delete user.iteration;
+
         var token = jwt.sign(user, 'secret');
         res.json({
          success: true,

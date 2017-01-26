@@ -11,6 +11,7 @@ angular.module('NeoLearning', [
   'angularFileUpload',
   'ui.bootstrap',
   'NeoLearning.signin',
+  'NeoLearning.board',
   'NeoLearning.uploadCourse',
   'NeoLearning.dashboard',
   'NeoLearning.student',

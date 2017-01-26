@@ -5,6 +5,7 @@ angular.module("NeoLearning")
   return {
     getUser: function(token){
       if(token){
+      
         return jwtHelper.decodeToken(token);
       }else{
         return 'no user data found';
