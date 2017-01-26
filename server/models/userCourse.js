@@ -42,5 +42,12 @@ module.exports = {
       cb(err);
     });
 
-  }
+  },
+  getUserCourseId: function(criteria, cb) {
+    db('UserCourse').select('idUserCourse').where({'idUser': criteria.idUser, 'idCourse': criteria.idCourse}).then(function(userCourses) {
+      cb(null, userCourses);
+    }).catch(function(err) {
+      cb(err);
+    });
+  },
 }
