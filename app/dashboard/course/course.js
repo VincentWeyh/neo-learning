@@ -45,8 +45,6 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
     setTimeout(function() {
      var element = document.getElementById("yourDivID");
      var inputData = document.getElementById("data");
-     inputData.value = '';
-     $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message = '';
      element.scrollTop = element.scrollHeight;
     }, 0);
   });
