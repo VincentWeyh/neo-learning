@@ -1,7 +1,7 @@
 var knex = require('knex')({
   client: 'postgres',
   connection: {
-    host : global.dbUrl,
+    host : 'db',
     user : 'apprenant',
     password : '0000',
     database : 'apprenant'

@@ -59,7 +59,6 @@ module.exports = function(router, DB) {
 
   router.post('/course/:id/user', function(req, res, next) {
     var criteria = [];
-    console.log('body : ', req.body);
     if(req.body.idUsers && !req.body.idUsers.length) {
       res.json({
          success: true,
@@ -86,7 +85,6 @@ module.exports = function(router, DB) {
   }),
   router.delete('/course/:id/user', function(req, res, next) {
     var criteria = [];
-    console.log('body delete: ', req.body);
     if(req.body.idUsers && !req.body.idUsers.length) {
       res.json({
          success: true,

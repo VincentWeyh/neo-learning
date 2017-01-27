@@ -47,10 +47,10 @@ router.post('/document', function(req, res, next) {
         });
       });
       c.connect({
-        host: '192.168.1.85',
-        port: 21,
-        user: 'test',
-        password: 'test',
+        host: '172.31.21.232',
+        port: 777,
+        user: 'siteweb',
+        password: 'P@ssw0rd',
         secure: true,
         secureOptions: {rejectUnauthorized:false}
       });
