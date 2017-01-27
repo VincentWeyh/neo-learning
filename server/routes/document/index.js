@@ -17,6 +17,14 @@ router.post('/document', function(req, res, next) {
 
       var c = new Client();
       c.on('ready', function() {
+        c.on('error', function(err) {
+          if (err) {
+            console.log('FTP error: ', err);
+          } else {0
+            console.log('Unknown FTP error: ', err);
+          }
+          c.destroy();
+        });
         c.put(filePath, 'neo-learning/' + req.body.idCourse + '/' + file.filename, function(err) {
           if (err) throw err;
           c.end();
@@ -29,6 +37,7 @@ router.post('/document', function(req, res, next) {
               if(err) {
                 throw err;
               }
+              c.destroy();
               res.json({
                  success: true,
                  data: doc
@@ -37,7 +46,6 @@ router.post('/document', function(req, res, next) {
           });
         });
       });
-      // connect to localhost:21 as anonymous
       c.connect({
         host: '192.168.1.85',
         port: 21,
