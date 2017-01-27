@@ -30,15 +30,26 @@
         <div class="clearfix "></div>
       </div>
       <div class="col-lg-8">
-        <div class="input-group ">
-          <input id="data" type="text " ng-model="getMessage" ng-model-options="{getterSetter: true }" ng-keypress="enter($event, getMessage)" class="form-control " placeholder="Type your message here ">
-          <span class="input-group-btn">
-            <button class="btn btn-primary btn-send" id="datasend " type="button" ng-click="doPost(getMessage)" >Send!</button>
-          </span>
+        <div class="input-group-btn">
+          <input style="width: 100%" id="data" type="text " ng-model="getMessage" ng-model-options="{getterSetter: true }" ng-keypress="enter($event, getMessage)" class="form-control " placeholder="Type your message here ">
         </div>
       </div>
+      <h3>Utilisateurs </h3>
+      <div ng-repeat="user in usersConnected">
 
-      {{usersConnected}}
+
+            <div class="media">
+
+
+
+              <div class="media-body">
+                <img alt="64x64" data-src="holder.js/64x64" class="pull-left media-object img-thumbnail" style="width: 30px; height: 30px;" src="http://placehold.it/64x64"><h3 class="media-heading">{{user}}</h3>
+                <!-- <p class="small">Dernière visite <span class="glyphicon glyphicon-time timestamp" data-toggle="tooltip" data-placement="bottom" title="Lundi 24 Avril 2014 à 18h25"></span> il y a 12 jours</p> -->
+              </div>
+            </div>
+
+
+
 
     </div>
 

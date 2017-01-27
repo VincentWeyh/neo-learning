@@ -15,7 +15,6 @@ var roomsUsers = [];
 io.sockets.on('connection', function (socket) {
 
   var createRoom = function(data) {
-    console.log('data server',data);
       var new_room = data.room;
       rooms.push(new_room);
       if(roomsUsers.indexOf(data.username) === -1) {
@@ -56,6 +55,10 @@ io.sockets.on('connection', function (socket) {
         delete usernames[socket.username];
         io.sockets.emit('updateusers', usernames);
         if (socket.username !== undefined) {
+            if (roomsUsers.indexOf(socket.username) !== -1){
+              console.log('delete',socket.username);
+              roomsUsers.splice(roomsUsers.indexOf(socket.username), 1);
+            }
             socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected', roomsUsers);
             socket.leave(socket.room);
         }

@@ -13,6 +13,10 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
   $scope.messages[UserService.getUser($window.sessionStorage.token).idUser] = {};
   $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message = '';
 
+  $scope.$on('$destroy', function(event) {
+    socket.emit('disconnect');
+  });
+
   $scope.getMessage = function(data) {
     if(typeof data !== 'undefined') {
       $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message = data;
@@ -32,7 +36,7 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
 
   socket.on('updatechat', function (username, data, usersConnected) {
     var user = {};
-    $scope.usersConnected = usersConnected;
+    $scope.usersConnected = Object.assign({}, usersConnected);
     user.username = username;
     user.message = data;
     user.date = new Date().getTime();
