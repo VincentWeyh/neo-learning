@@ -225,3 +225,80 @@ ul.alert-dropdown {
 .panel-yellow > a:hover {
     color: #df8a13;
 }
+
+
+.panel-yellow {
+    border: 1px solid #f0ad4e !important;
+}
+
+.panel-yellow > .panel-heading {
+    border-color: #f0ad4e;
+    color: #fff;
+    background-color: #f0ad4e;
+}
+
+.panel-yellow > a {
+    color: #f0ad4e;
+}
+
+.panel-yellow > a:hover {
+    color: #df8a13;
+}
+
+
+
+.panel-course {
+    border: 1px solid #1abc9c !important;
+}
+
+.panel-course > .panel-heading {
+    border-color: #1abc9c;
+    color: #fff;
+    background-color: #1abc9c;
+}
+
+.panel-course > a {
+    color: #1abc9c;
+}
+
+.panel-course > a:hover {
+    color: #1abc9c;
+}
+
+
+
+.panel-test {
+    border: 1px solid #e67e22 !important;
+}
+
+.panel-test > .panel-heading {
+    border-color: #e67e22;
+    color: #fff;
+    background-color: #e67e22;
+}
+
+.panel-test > a {
+    color: #e67e22;
+}
+
+.panel-test > a:hover {
+    color: #e67e22;
+}
+
+.panel-file {
+    border: 1px solid #95a5a6 !important;
+}
+
+.panel-file > .panel-heading {
+    border-color: #95a5a6;
+    color: #fff;
+    background-color: #95a5a6;
+}
+
+.panel-file > a {
+    color: #95a5a6;
+}
+
+.panel-file > a:hover {
+    color: #95a5a6;
+}
