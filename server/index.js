@@ -1,5 +1,6 @@
 var express = require('express'),
     _ = require('lodash'),
+    cors = require('cors'),
     // errorHandler = require('error-handler'),
     DB = require('./models');
     passport = require('passport');
@@ -31,7 +32,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-
+app.use(cors());
+app.options('*', cors())
 app.use(passport.initialize());
 
 var env = process.env.NODE_ENV || 'development';

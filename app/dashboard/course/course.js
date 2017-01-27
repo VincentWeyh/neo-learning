@@ -1,7 +1,86 @@
 'use strict';
 
 angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
-.controller('CourseCtrl', ['$scope', '$rootScope', '$state', '$stateParams',  '$window', '$filter', 'UserService', 'CourseService', 'DocumentService', 'SweetAlert', 'FileSaver', function($scope, $rootScope, $state, $stateParams, $window, $filter, UserService, CourseService, DocumentService, SweetAlert, FileSaver) {
+.factory('socket', function (socketFactory) {
+    return socketFactory({
+      ioSocket: io.connect('localhost:7050')
+    });
+}).controller('CourseCtrl', ['$scope', '$rootScope', '$state', '$stateParams', '$window', '$filter', 'UserService', 'CourseService', 'DocumentService', 'SweetAlert', 'FileSaver', 'socket', function($scope, $rootScope, $state, $stateParams, $window, $filter, UserService, CourseService, DocumentService, SweetAlert, FileSaver, socket) {
+
+  $scope.users = [];
+  $scope.usersConnected = [];
+  $scope.messages = {};
+  $scope.messages[UserService.getUser($window.sessionStorage.token).idUser] = {};
+  $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message = '';
+
+  $scope.getMessage = function(data) {
+    if(typeof data !== 'undefined') {
+      $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message = data;
+    }
+    return $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message;
+  };
+
+  $scope.enter = function(keyEvent, message) {
+    if (keyEvent.which === 13) {
+      $scope.doPost($scope.getMessage());
+    }
+  };
+
+  socket.on('connect', function () {
+    $scope.joinRoom({});
+  });
+
+  socket.on('updatechat', function (username, data, usersConnected) {
+    var user = {};
+    $scope.usersConnected = usersConnected;
+    user.username = username;
+    user.message = data;
+    user.date = new Date().getTime();
+    user.image = 'http://dummyimage.com/100x100/000/fff&text=' + username.charAt(0).toUpperCase();
+    $scope.users.push(user);
+    setTimeout(function() {
+     var element = document.getElementById("yourDivID");
+     var inputData = document.getElementById("data");
+     inputData.value = '';
+     $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message = '';
+     element.scrollTop = element.scrollHeight;
+    }, 0);
+  });
+
+  socket.on('roomcreated', function (data) {
+    socket.emit('adduser', data);
+  });
+
+  $scope.joinRoom = function (data) {
+    var user = UserService.getUser($window.sessionStorage.token);
+    data.username = user.firstName + '_' + user.lastName;
+    data.room = $stateParams.id;
+    $scope.currentUser = data.username;
+    console.log(data.username);
+    socket.emit('userconnect', data.username);
+    socket.emit('adduser', data);
+  }
+
+  $scope.doPost = function (message) {
+    if(!message) {
+      return;
+    }
+    socket.emit('sendchat', message);
+    setTimeout(function() {
+     var element = document.getElementById("yourDivID");
+     var inputData = document.getElementById("data");
+     inputData.value = '';
+     $scope.messages[UserService.getUser($window.sessionStorage.token).idUser].message = '';
+     element.scrollTop = element.scrollHeight;
+    }, 0);
+  }
+
+  CourseService.api('course/' + $stateParams.id).get()
+  .$promise.then(function(result){
+    if(result.success){
+      $scope.course = result.data;
+    }
+  })
 
   $scope.courseId = $stateParams.id;
   $scope.itemsByPage=7;
@@ -15,13 +94,19 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
     $scope.userName = user.firstName;
   }
 
+  CourseService.api('course/'+ $scope.courseId).get().$promise
+  .then(function(result){
+     if(result.success){
+       $scope.course= result.data;
+     }else{
+       //ERROR
+     }
+   })
 
   $rootScope.resfreshDocument = function(){
-
     var documentsRequest = DocumentService.get('documents/' + $scope.courseId );
     documentsRequest.then(function(result){
       if(result.status){
-        console.log('result.data refresh',result.data);
         $scope.displayedDocuments = result.data.data;
         $scope.rowDocuments = result.data.data;
         // fillStudentsTable(result.data);
@@ -29,7 +114,6 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
         //ERROR
       }
     })
-
   };
 
   $scope.displayedDocuments = [];
@@ -37,9 +121,21 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
     $rootScope.resfreshDocument();
   }
 
+  $scope.registeredStudents = [];
+    CourseService.api('course/'+ $stateParams.id +'/user').get()
+    .$promise.then(function(result){
+     if(result.success){
+        $scope.registeredStudents = result.data.studentCourses;
+        $scope.rowRegisteredStudents = result.data.studentCourses;
+        $scope.courseTeacher = result.data.teacherCourses
+     }else{
+       //ERROR
+     }
+  })
+
   $scope.displayedCourses = [];
-  var coursesRequest = CourseService.api('course').get();
-  coursesRequest.$promise.then(function(result){
+  CourseService.api('course').get()
+  .$promise.then(function(result){
     if(result.success){
       $scope.displayedCourses = result.data;
       $scope.rowCourses = result.data;
@@ -47,6 +143,7 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
       //ERROR
     }
   })
+
   $scope.displayedStudents = [];
   var usersRequest = UserService.api('user').get();
   usersRequest.$promise.then(function(result){
@@ -199,30 +296,24 @@ angular.module('NeoLearning.course', ['oitozero.ngSweetAlert', 'ngFileSaver'])
   }
 
   $scope.download = function(document){
-
     var documentRequest = DocumentService.download('document/' + document.idDocument  );
     documentRequest.then(function(result){
       if(result.status){
         var blob = new Blob([result.data], { type: 'application/octet-stream' });
         FileSaver.saveAs(blob, document.originalName);
-      }else{
-        //ERROR
+        }else{
+          //ERROR
+          var documentRequest = DocumentService.api('document/' + document.idDocument ).get();
+          documentRequest.$promise.then(function(result){
+            if(result.success){
 
-        console.log('document', document);
-        var documentRequest = DocumentService.api('document/' + document.idDocument ).get();
-        documentRequest.$promise.then(function(result){
-          console.log('TATA : ' ,result.data);
-          if(result.success){
-
-
-          }
-        })
-      }
+            }
+          })
+        }
     })
   }
 
   $scope.goToCourseDetail = function(course) {
     $state.go("course", { id: course.idCourse });
   };
-
 }]);

@@ -5,8 +5,26 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
   $scope.itemsByPage=7;
   $scope.validRole=false;
 
+  $scope.studentId = $stateParams.id;
 
-  console.log('studentCtrl');
+  UserService.api('user/'+ $scope.studentId).get().$promise
+  .then(function(result){
+     if(result.success){
+       $scope.userSelected= result.data;
+     }else{
+       //ERROR
+     }
+   })
+   UserService.api('user/'+ $scope.studentId +'/course').get().$promise
+   .then(function(result){
+      if(result.success){
+         console.log('resultSudent', result);
+        $scope.userSelectedCourse= result.data.studentCourses;
+        $scope.rowCourses = result.data.studentCourses;
+      }else{
+        //ERROR
+      }
+    })
 
   // GET USER INFO
   var user = UserService.getUser($window.sessionStorage.token);
@@ -18,7 +36,6 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
   userRoleListRequest.$promise.then(function(result){
     if(result.success){
       $scope.userRoleList = result.data;
-      console.log('roles list success', result.data);
     }
   })
 
@@ -37,7 +54,6 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
   var usersRequest = UserService.api('user').get();
   usersRequest.$promise.then(function(result){
     if(result.success){
-      console.log('student get success');
       $scope.displayedUsers = result.data;
       $scope.rowUsers = result.data;
     }else{
@@ -47,25 +63,13 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
 
   $scope.checkFormInput = function(){
     $scope.submitted = true;
-    console.log('userIdRole', $scope.userIdRole);
     if (!$scope.userIdRole){
-      console.log('userIdRole', $scope.userIdRole);
       $scope.invalidRole = true;
       $('#roleListInput').addClass('has-error');
       return;
     }
     $scope.addUser();
   }
-
-  // $scope.checkEditFormInput = function(){
-  //   $scope.submitted = true;
-  //   if (!$('#editUserRole').val()){
-  //     $scope.invalidRole = true;
-  //     $('#roleListInput').addClass('has-error');
-  //     return;
-  //   }
-  //   $scope.editUser();
-  // }
 
   $scope.checkRoleValue = function(){
     if(!!$scope.userIdRole){
@@ -75,17 +79,20 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
   }
 
   $scope.addUser = function(){
-    console.log('addUser');
     var user = {
                 firstName: $scope.userFirstName, lastName: $scope.userLastName,
                 email: $scope.userEmail, password: $scope.userPassword, city: $scope.userCity,
                 phone: $scope.userPhone, address: $scope.userAddress, idRole: $scope.userIdRole.idRole,
                 birthdate: $scope.userBirthdate
                }
-
+    console.log('birthdate' , $scope.userBirthdate);
     Object.keys(user).forEach(function(key){
       if(!user[key]) {
         delete user[key];
+      }else{
+        if(key == "birthdate"){
+          new Date(user[key]);
+        }
       }
     })
 
@@ -93,21 +100,20 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
     userAddRequest.$promise.then(function(result){
       if(result.success){
         $('#newModalUser').modal('hide');
-        console.log('result', result);
-        console.log('addedUser', user);
+        user.idUser = result.data;
         $scope.displayedUsers.push(user);
         $scope.rowUsers.push(user);
+        console.log('addedUser', user);
         SweetAlert.swal("L'utilisateur " + user.firstName + " " + user.lastName + " à été ajouté avec succès !", "", "success");
       }else{
         $('#newModalUser').modal('hide');
-        SweetAlert.swal("Une erreur est survenue (" + result.error + ")", "", "error");
+        SweetAlert.swal("Une erreur est survenue (" + result.message + ")", "", "error");
       }
       $('#newModalUser').modal('hide');
     })
   }
 
   $scope.openEditUserModal = function(selectedEditableUser){
-    console.log('openuserModal');
     $scope.userFirstName = selectedEditableUser;
     $scope.userIdRole = null;
     $scope.userLastName = null;
@@ -120,14 +126,18 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
     $scope.userBirthdate = null;
     $scope.registeredStudentCount = null;
     $scope.addedStudentsTxt = null;
+    console.log(selectedEditableUser);
+    if(selectedEditableUser.birthdate){
+      selectedEditableUser.birthdate = selectedEditableUser.birthdate.toString().substring(0,10);
+    }
     $scope.selectedEditableUser = selectedEditableUser;
     $scope.editableRole = selectedEditableUser.idRole;
+    $('#selectedUserBirthdate').val(selectedEditableUser.birthdate);
     setTimeout(function(){$('#editUserRole').val($scope.selectedEditableUser.idRole);}, 1);
     $('#editModalUser').modal('show');
   }
 
   $scope.editUser = function(){
-    console.log("editedPassword", $scope.editedPassword);
 
     var user = {
                 firstName: $scope.selectedEditableUser.firstName, lastName: $scope.selectedEditableUser.lastName,
@@ -138,16 +148,12 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
 
     Object.keys(user).forEach(function(key){
       if(!user[key]) {
-        console.log('key', key);
-        console.log('user key', user[key]);
         delete user[key];
       }
     })
 
-    console.log('user',user);
     UserService.api('user/' + $scope.selectedEditableUser.idUser ).update(user).
     $promise.then(function(result){
-      console.log('result', result);
        if(result.success){
          SweetAlert.swal("Utilisateur édité avec succès !", "", "success");
        }
@@ -157,6 +163,7 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
 
   $scope.openNewModalUser = function(){
     $scope.userIdRole = null;
+    $scope.userFirstName = null;
     $scope.userLastName = null;
     $scope.courseDescription = null;
     $scope.userEmail = null;
@@ -197,7 +204,6 @@ angular.module('NeoLearning.student', ['oitozero.ngSweetAlert'])
               else
               {
                 SweetAlert.swal("Erreur lors de la suppression!");
-                console.log('result error', result);
               }
             })
           }

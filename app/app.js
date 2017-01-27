@@ -11,13 +11,17 @@ angular.module('NeoLearning', [
   'angularFileUpload',
   'ui.bootstrap',
   'NeoLearning.signin',
+  'NeoLearning.board',
   'NeoLearning.uploadCourse',
   'NeoLearning.dashboard',
   'NeoLearning.student',
   'NeoLearning.document',
   'NeoLearning.course',
+  'NeoLearning.courses',
+  'NeoLearning.navigation',
   'NeoLearning.chat',
   'NeoLearning.board',
+  'NeoLearning.profile',
   'NeoLearning.navigation',
   'btford.socket-io',
   'ngFileSaver'
@@ -41,6 +45,14 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
     url: '/dashboard',
     views : {
       'container': { templateUrl: '/dashboard/dashboard.html', controller: 'DashCtrl'},
+      'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
+    },
+    authenticate: true,
+  })
+  $stateProvider.state('profile', {
+    url: '/profile',
+    views : {
+      'container': { templateUrl: '/dashboard/profile/profile.html', controller: 'ProfileCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
     },
     authenticate: true,
@@ -75,7 +87,7 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
   $stateProvider.state('courses', {
     url: '/dashboard/courses',
     views : {
-      'container': { templateUrl: 'dashboard/course/courses.html', controller: 'CourseCtrl'},
+      'container': { templateUrl: 'dashboard/course/courses.html', controller: 'CoursesCtrl'},
       'nav': { templateUrl: 'shared/navigation/navigation.html', controller: 'NavCtrl'}
     },
     authenticate: true,
@@ -128,7 +140,6 @@ config(['$locationProvider', '$stateProvider', '$urlRouterProvider','$resourcePr
   //$rootScope.url ='http://34.248.83.191';
 
   $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
-    console.log("route changed", UserService.isAuth());
     if (toState.authenticate && !UserService.isAuth()){
       // User isn’t authenticated
       $state.transitionTo("signin");

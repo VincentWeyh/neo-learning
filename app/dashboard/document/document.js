@@ -12,7 +12,6 @@ angular.module('NeoLearning.document', [])
      var documentsRequest = DocumentService.get('documents/user/' + user.idUser );
      documentsRequest.then(function(result){
        if(result.status){
-         console.log('result.data',result.data);
          $scope.displayedDocuments = result.data.data;
          //$scope.rowDocuments = result.data.data;
          // fillStudentsTable(result.data);
@@ -30,7 +29,6 @@ angular.module('NeoLearning.document', [])
          }else{
            //ERROR
 
-       console.log('document', document);
        var documentRequest = DocumentService.api('document/' + document.idDocument ).get();
        documentRequest.$promise.then(function(result){
          if(result.success){

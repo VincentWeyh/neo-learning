@@ -40,8 +40,8 @@
       <tr class="selectable-row" ng-if="course.enabled == true" ng-repeat="course in displayedCourses">
         <td>{{course.label}}</td>
         <td>{{course.description}}</td>
-        <td>{{course.createdAt}}</td>
-        <td>{{course.updatedAt}}</td>
+        <td>{{course.createdAt.substring(0,10)}}</td>
+        <td>{{course.updatedAt.substring(0,10)}}</td>
         <td></td>
         <td></td>
         <td>
@@ -78,7 +78,7 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">Création d'une classe</h4>
-      </div>	
+      </div>
       <div class="modal-body">
         <div class="form-group">
           <label for="courseName">Name:</label>
@@ -176,7 +176,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr class="selectable-row" st-select-row="student" ng-click="addStudent(student)" st-select-mode="multiple" ng-repeat="student in displayedStudents">
+                      <tr class="selectable-row" st-select-row="student" ng-click="addMoreStudent(student)" st-select-mode="multiple" ng-repeat="student in displayedStudents">
                         <td>{{student.firstName}}</td>
                         <td>{{student.lastName}}</td>
                         <td>{{student.email}}</td>
